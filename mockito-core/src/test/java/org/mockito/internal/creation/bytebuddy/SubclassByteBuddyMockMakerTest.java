@@ -15,7 +15,6 @@ import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.plugins.MockMaker;
-import org.mockito.stubbing.Answer;
 import org.mockitoutil.ClassLoaders;
 
 import java.io.Serializable;
@@ -23,7 +22,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.Semaphore;
+import java.util.function.IntSupplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
@@ -41,9 +40,10 @@ public class SubclassByteBuddyMockMakerTest
             throws Exception {
         ClassLoader classLoader = mockitoClassLoader().build();
 
-        Semaphore mock = ClassLoaders.using(classLoader).execute(() -> mockSemaphore(classLoader));
+        IntSupplier mock =
+                ClassLoaders.using(classLoader).execute(() -> mockAbstractClass(classLoader));
 
-        assertThat(mock.getClass().getSuperclass()).isEqualTo(Semaphore.class);
+        assertThat(mock.getAsInt()).isZero();
     }
 
     @Test
@@ -52,20 +52,23 @@ public class SubclassByteBuddyMockMakerTest
 
         assertThatExceptionOfType(ClassNotFoundException.class)
                 .isThrownBy(() -> classLoader.loadClass("sun.misc.Unsafe"));
-        int permits =
-                ClassLoaders.using(classLoader)
-                        .execute(() -> mockSemaphore(classLoader, 3).availablePermits());
+        IntSupplier mock =
+                ClassLoaders.using(classLoader).execute(() -> mockAbstractClass(classLoader, 3));
 
-        assertThat(permits).isEqualTo(3);
+        assertThat(mock.getAsInt()).isEqualTo(3);
     }
 
     private static ClassLoaders.ExcludingURLClassLoaderBuilder mockitoClassLoader() {
         return ClassLoaders.excludingClassLoader()
-                .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class, ByteBuddyAgent.class)
+                .withCodeSourceUrlOf(
+                        Mockito.class,
+                        ByteBuddy.class,
+                        ByteBuddyAgent.class,
+                        AbstractClassToMock.class)
                 .withCodeSourceUrlOf(coverageTool());
     }
 
-    private static Semaphore mockSemaphore(ClassLoader classLoader, Object... constructorArgs)
+    private static IntSupplier mockAbstractClass(ClassLoader classLoader, Object... constructorArgs)
             throws ReflectiveOperationException {
         // Resolve Mockito and its settings API in the isolated loader used by the test.
         Class<?> mockito = classLoader.loadClass(Mockito.class.getName());
@@ -76,14 +79,11 @@ public class SubclassByteBuddyMockMakerTest
             settingsType
                     .getMethod("useConstructor", Object[].class)
                     .invoke(settings, (Object) constructorArgs);
-            Class<?> answerType = classLoader.loadClass(Answer.class.getName());
-            settingsType
-                    .getMethod("defaultAnswer", answerType)
-                    .invoke(settings, mockito.getField("CALLS_REAL_METHODS").get(null));
         }
-        return (Semaphore)
+        Class<?> typeToMock = classLoader.loadClass(AbstractClassToMock.class.getName());
+        return (IntSupplier)
                 mockito.getMethod("mock", Class.class, settingsType)
-                        .invoke(null, Semaphore.class, settings);
+                        .invoke(null, typeToMock, settings);
     }
 
     @Test

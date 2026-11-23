@@ -23,6 +23,9 @@ import sun.misc.Unsafe;
  * method delegates to the same allocator. See
  * <a href="https://github.com/openjdk/jdk/pull/15600">OpenJDK PR #15600</a>.
  *
+ * <p>The {@code jdk.unsupported} module exports and opens {@code sun.misc}, so Mockito can access
+ * {@code sun.misc.Unsafe} without additional module flags.
+ *
  * <p>OpenJDK plans to retain {@code Unsafe.allocateInstance} for the medium term. See
  * <a href="https://openjdk.org/jeps/471#Future-Work:~:text=allocateInstance,project">JEP 471</a>.
  */

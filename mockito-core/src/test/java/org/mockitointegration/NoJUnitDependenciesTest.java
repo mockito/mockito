@@ -26,8 +26,13 @@ public class NoJUnitDependenciesTest {
 
         ClassLoader classLoader_without_JUnit =
                 ClassLoaders.excludingClassLoader()
+                        // spotless:off
                         .withCodeSourceUrlOf(
-                                Mockito.class, Matcher.class, ByteBuddy.class, ByteBuddyAgent.class)
+                                Mockito.class,
+                                Matcher.class,
+                                ByteBuddy.class,
+                                ByteBuddyAgent.class)
+                        // spotless:on
                         .withCodeSourceUrlOf(coverageTool())
                         .without("junit", "org.junit", "org.opentest4j")
                         .build();

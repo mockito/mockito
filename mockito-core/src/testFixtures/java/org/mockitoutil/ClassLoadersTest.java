@@ -295,14 +295,20 @@ public class ClassLoadersTest {
                                 () -> {
                                     ClassLoader contextLoader =
                                             currentThread().getContextClassLoader();
-                                    assertThat(contextLoader).isSameAs(cl);
+                                    assertThat(contextLoader)
+                                            .describedAs(
+                                                    "thread uses the given context classloader")
+                                            .isSameAs(cl);
                                     assertThat(contextLoader.loadClass(String.class.getName()))
+                                            .describedAs("can load JDK type")
                                             .isSameAs(String.class);
                                     return contextLoader.loadClass(
                                             CLASS_NAME_DEPENDING_ON_INTERFACE);
                                 });
 
-        assertThat(loadedClass.getClassLoader()).isSameAs(cl);
+        assertThat(loadedClass.getClassLoader())
+                .describedAs("test class is defined by the given classloader")
+                .isSameAs(cl);
     }
 
     @Test
