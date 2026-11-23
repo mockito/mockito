@@ -7,6 +7,7 @@ package org.mockito.internal.configuration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import net.bytebuddy.ByteBuddy;
+import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -19,26 +20,22 @@ public class GlobalConfigurationTest {
             throws Exception {
         ClassLoader isolatedLoader =
                 ClassLoaders.isolatedClassLoader()
-                        .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class)
-                        .withPrivateCopyOf("org.mockito", "net.bytebuddy")
+                        .withCurrentCodeSourceUrls()
+                        .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class, Assertions.class)
+                        .withPrivateCopyOf(
+                                "org.mockito",
+                                "net.bytebuddy",
+                                "org.mockitoutil",
+                                "org.assertj.core")
                         .without("org.mockito.configuration.MockitoConfiguration")
                         .build();
 
         ClassLoaders.using(isolatedLoader)
                 .execute(
                         () -> {
-                            Class<?> configuration =
-                                    isolatedLoader.loadClass(GlobalConfiguration.class.getName());
-                            Class<?> plugins = isolatedLoader.loadClass(Plugins.class.getName());
-
-                            Object engine =
-                                    configuration
-                                            .getMethod("tryGetPluginAnnotationEngine")
-                                            .invoke(configuration.getConstructor().newInstance());
-                            assertThat(engine)
+                            assertThat(new GlobalConfiguration().tryGetPluginAnnotationEngine())
                                     .isNotNull()
-                                    .isSameAs(
-                                            plugins.getMethod("getAnnotationEngine").invoke(null));
+                                    .isSameAs(Plugins.getAnnotationEngine());
                             return null;
                         });
     }

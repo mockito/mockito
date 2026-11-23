@@ -284,19 +284,17 @@ public class ClassLoadersTest {
 
     @Test
     public void can_run_in_given_classloader() throws Exception {
-        ClassLoader cl =
-                isolatedClassLoader()
-                        .withCurrentCodeSourceUrls()
-                        .withCodeSourceUrlOf(Assertions.class)
-                        .withPrivateCopyOf("org.assertj.core")
-                        .withPrivateCopyOf(ClassLoadersTest.class.getPackage().getName())
-                        .without(AClass.class.getName())
-                        .build();
+        ClassLoader cl = classLoaderWithoutAClass();
+        String excludedClass = AClass.class.getName();
 
         Class<?> loadedClass =
                 ClassLoaders.using(cl)
                         .execute(
                                 () -> {
+                                    assertThat(ClassLoadersTest.class.getClassLoader())
+                                            .describedAs(
+                                                    "lambda is loaded by the given classloader")
+                                            .isSameAs(cl);
                                     ClassLoader contextLoader =
                                             currentThread().getContextClassLoader();
                                     assertThat(contextLoader)
@@ -306,16 +304,10 @@ public class ClassLoadersTest {
                                     assertThat(contextLoader.loadClass(String.class.getName()))
                                             .describedAs("can load JDK type")
                                             .isSameAs(String.class);
-                                    assertThat(
-                                                    contextLoader
-                                                            .loadClass(Assertions.class.getName())
-                                                            .getClassLoader())
+                                    assertThat(Assertions.class.getClassLoader())
                                             .describedAs("can load a private copy of AssertJ")
                                             .isSameAs(cl);
-                                    assertThatThrownBy(
-                                                    () ->
-                                                            contextLoader.loadClass(
-                                                                    AClass.class.getName()))
+                                    assertThatThrownBy(() -> contextLoader.loadClass(excludedClass))
                                             .describedAs("rejects the excluded class")
                                             .isInstanceOf(ClassNotFoundException.class);
                                     return contextLoader.loadClass(
@@ -328,27 +320,28 @@ public class ClassLoadersTest {
     }
 
     @Test
-    public void cannot_load_class_from_task_when_dependency_is_excluded() {
-        ClassLoader cl =
-                isolatedClassLoader()
-                        .withCurrentCodeSourceUrls()
-                        .withPrivateCopyOf(CLASS_NAME_DEPENDING_ON_INTERFACE, INTERFACE_NAME)
-                        .without(INTERFACE_NAME)
-                        .build();
-
-        var executor = ClassLoaders.using(cl);
+    public void cannot_load_class_from_task_when_type_is_excluded() {
+        var executor = ClassLoaders.using(classLoaderWithoutAClass());
         assertThatThrownBy(
                         () ->
                                 executor.execute(
                                         () -> {
-                                            ClassLoader contextLoader =
-                                                    currentThread().getContextClassLoader();
-                                            return contextLoader.loadClass(
-                                                    CLASS_NAME_DEPENDING_ON_INTERFACE);
+                                            new AClass();
+                                            return null;
                                         }))
                 .isInstanceOf(IllegalStateException.class)
                 .hasCauseInstanceOf(NoClassDefFoundError.class)
-                .hasMessageContaining("ClassLoadersTest$Interface1");
+                .hasMessageContaining("ClassLoadersTest$AClass");
+    }
+
+    private static ClassLoader classLoaderWithoutAClass() {
+        return isolatedClassLoader()
+                .withCurrentCodeSourceUrls()
+                .withCodeSourceUrlOf(Assertions.class)
+                .withPrivateCopyOf("org.assertj.core")
+                .withPrivateCopyOf(ClassLoadersTest.class.getPackage().getName())
+                .without(AClass.class.getName())
+                .build();
     }
 
     @SuppressWarnings("unused")

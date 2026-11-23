@@ -11,7 +11,10 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.lang.StackWalker.Option;
+import java.lang.invoke.SerializedLambda;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -90,6 +93,9 @@ public abstract class ClassLoaders {
         return new ClassLoaderExecutor(classLoader);
     }
 
+    @FunctionalInterface
+    public interface SerializableCallable<T> extends Callable<T>, Serializable {}
+
     public static class ClassLoaderExecutor {
         private final ClassLoader classLoader;
 
@@ -97,7 +103,8 @@ public abstract class ClassLoaders {
             this.classLoader = classLoader;
         }
 
-        public <T> T execute(Callable<T> task) throws Exception {
+        /** Runs a lambda defined by the given loader, passing its captured values unchanged. */
+        public <T> T execute(SerializableCallable<T> task) throws Exception {
             ExecutorService executorService =
                     Executors.newSingleThreadExecutor(
                             r -> {
@@ -106,7 +113,7 @@ public abstract class ClassLoaders {
                                 return thread;
                             });
             try {
-                return executorService.submit(task).get();
+                return executorService.submit(() -> reloadTaskInClassLoader(task).call()).get();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 throw e;
@@ -120,6 +127,22 @@ public abstract class ClassLoaders {
             } finally {
                 executorService.shutdownNow();
             }
+        }
+
+        @SuppressWarnings("unchecked")
+        private <T> Callable<T> reloadTaskInClassLoader(SerializableCallable<T> task)
+                throws ReflectiveOperationException {
+            Method writeReplace = task.getClass().getDeclaredMethod("writeReplace");
+            writeReplace.setAccessible(true);
+            SerializedLambda lambda = (SerializedLambda) writeReplace.invoke(task);
+
+            // Recreate the lambda with the isolated class's factory. JaCoCo owns its probe state.
+            Class<?> capturingClass =
+                    classLoader.loadClass(lambda.getCapturingClass().replace('/', '.'));
+            Method deserialize =
+                    capturingClass.getDeclaredMethod("$deserializeLambda$", SerializedLambda.class);
+            deserialize.setAccessible(true);
+            return (Callable<T>) deserialize.invoke(null, lambda);
         }
     }
 

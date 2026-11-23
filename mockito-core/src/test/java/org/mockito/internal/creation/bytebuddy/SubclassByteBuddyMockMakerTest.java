@@ -43,8 +43,7 @@ public class SubclassByteBuddyMockMakerTest
             throws Exception {
         ClassLoader classLoader = mockitoClassLoader().build();
 
-        IntSupplier mock =
-                ClassLoaders.using(classLoader).execute(() -> mockAbstractClass(classLoader));
+        IntSupplier mock = ClassLoaders.using(classLoader).execute(() -> mockAbstractClass());
 
         assertThat(mock.getAsInt()).isZero();
     }
@@ -55,8 +54,7 @@ public class SubclassByteBuddyMockMakerTest
 
         assertThatExceptionOfType(ClassNotFoundException.class)
                 .isThrownBy(() -> classLoader.loadClass("sun.misc.Unsafe"));
-        IntSupplier mock =
-                ClassLoaders.using(classLoader).execute(() -> mockAbstractClass(classLoader, 3));
+        IntSupplier mock = ClassLoaders.using(classLoader).execute(() -> mockAbstractClass(3));
 
         assertThat(mock.getAsInt()).isEqualTo(3);
     }
@@ -73,14 +71,12 @@ public class SubclassByteBuddyMockMakerTest
                 .withCodeSourceUrlOf(coverageTool());
     }
 
-    private static IntSupplier mockAbstractClass(ClassLoader classLoader, Object... constructorArgs)
-            throws ReflectiveOperationException {
-        // Invoke the factory defined by the isolated loader so it resolves its own Mockito.
-        return (IntSupplier)
-                classLoader
-                        .loadClass(AbstractClassToMock.class.getName())
-                        .getMethod("createMock", Object[].class)
-                        .invoke(null, (Object) constructorArgs);
+    private static IntSupplier mockAbstractClass(Object... constructorArgs) {
+        MockSettings settings = withSettings().mockMaker(MockMakers.SUBCLASS);
+        if (constructorArgs.length > 0) {
+            settings.useConstructor(constructorArgs);
+        }
+        return mock(AbstractClassToMock.class, settings);
     }
 
     public abstract static class AbstractClassToMock implements IntSupplier {
@@ -93,14 +89,6 @@ public class SubclassByteBuddyMockMakerTest
         @Override
         public final int getAsInt() {
             return value;
-        }
-
-        public static IntSupplier createMock(Object... constructorArgs) {
-            MockSettings settings = withSettings().mockMaker(MockMakers.SUBCLASS);
-            if (constructorArgs.length > 0) {
-                settings.useConstructor(constructorArgs);
-            }
-            return mock(AbstractClassToMock.class, settings);
         }
     }
 
