@@ -14,20 +14,8 @@ import org.mockito.plugins.MockMaker;
  * <p>
  * <ul>
  *     <li>
- *         Can load the mockito configuration. The user who want to provide his own mockito configuration
- *         should write the class <code>org.mockito.configuration.MockitoConfiguration</code> that implements
- *         {@link IMockitoConfiguration}. For example :
- *         <pre class="code"><code class="java">
- * package org.mockito.configuration;
- *
- * //...
- *
- * public class MockitoConfiguration implements IMockitoConfiguration {
- *     public boolean cleansStackTrace() { return false; }
- *
- *     // ...
- * }
- *     </code></pre>
+ *         Loads <code>org.mockito.configuration.MockitoConfiguration</code>, which implements
+ *         {@link IMockitoConfiguration}.
  *     </li>
  *     <li>
  *         Can load available mockito extensions. Currently Mockito only have one extension point the

@@ -56,8 +56,7 @@ public interface IMockitoConfiguration {
     boolean cleansStackTrace();
 
     /**
-     * @deprecated Retained for compatibility. Mockito's default instantiator does not cache classes.
+     * Retained for compatibility. Mockito's default instantiator allocates instances without a class cache.
      */
-    @Deprecated
     boolean enableClassCache();
 }

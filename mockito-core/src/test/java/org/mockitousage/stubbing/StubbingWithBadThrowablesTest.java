@@ -4,12 +4,11 @@
  */
 package org.mockitousage.stubbing;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.doThrow;
 
 import java.util.List;
 
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -23,12 +22,7 @@ public class StubbingWithBadThrowablesTest extends TestBase {
 
     @Test
     public void handles_bad_exception() {
-        Assertions.assertThatThrownBy(
-                        new ThrowableAssert.ThrowingCallable() {
-                            public void call() {
-                                doThrow(UninstantiableException.class).when(mock).clear();
-                            }
-                        })
+        assertThatThrownBy(() -> doThrow(UninstantiableException.class).when(mock).clear())
                 .hasRootCauseInstanceOf(InstantiationException.class);
 
         // ensure that the state is cleaned

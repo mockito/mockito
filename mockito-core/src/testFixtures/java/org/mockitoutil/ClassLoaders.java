@@ -33,7 +33,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public abstract class ClassLoaders {
     protected ClassLoader parent = currentClassLoader();
@@ -107,33 +106,20 @@ public abstract class ClassLoaders {
                                 return thread;
                             });
             try {
-                Future<T> taskFuture =
-                        executorService.submit(
-                                () -> {
-                                    try {
-                                        return reloadTaskInClassLoader(task).call();
-                                    } catch (Throwable throwable) {
-                                        throw new IllegalStateException(
-                                                format(
-                                                        "Given task could not be loaded properly in the given classloader '%s', error '%s",
-                                                        task, throwable.getMessage()),
-                                                throwable);
-                                    }
-                                });
-                return taskFuture.get();
+                return executorService.submit(() -> reloadTaskInClassLoader(task).call()).get();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 throw e;
             } catch (ExecutionException e) {
-                throw this.<Exception>unwrapAndThrows(e);
+                Throwable cause = e.getCause();
+                throw new IllegalStateException(
+                        format(
+                                "Given task could not be loaded properly in the given classloader '%s', error '%s",
+                                task, cause.getMessage()),
+                        cause);
             } finally {
                 executorService.shutdownNow();
             }
-        }
-
-        @SuppressWarnings("unchecked")
-        private <T extends Throwable> T unwrapAndThrows(ExecutionException ex) throws T {
-            throw (T) ex.getCause();
         }
 
         @SuppressWarnings("unchecked")
