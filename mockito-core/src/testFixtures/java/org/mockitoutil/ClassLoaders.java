@@ -98,6 +98,10 @@ public abstract class ClassLoaders {
         }
 
         public <T> T execute(Class<? extends Callable<T>> task) throws Exception {
+            return execute(() -> reloadTaskInClassLoader(task).call());
+        }
+
+        public <T> T execute(Callable<T> task) throws Exception {
             ExecutorService executorService =
                     Executors.newSingleThreadExecutor(
                             r -> {
@@ -106,7 +110,7 @@ public abstract class ClassLoaders {
                                 return thread;
                             });
             try {
-                return executorService.submit(() -> reloadTaskInClassLoader(task).call()).get();
+                return executorService.submit(task).get();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 throw e;
@@ -114,8 +118,8 @@ public abstract class ClassLoaders {
                 Throwable cause = e.getCause();
                 throw new IllegalStateException(
                         format(
-                                "Given task could not be loaded properly in the given classloader '%s', error '%s",
-                                task, cause.getMessage()),
+                                "Could not execute task in class loader '%s': %s",
+                                classLoader, cause.getMessage()),
                         cause);
             } finally {
                 executorService.shutdownNow();

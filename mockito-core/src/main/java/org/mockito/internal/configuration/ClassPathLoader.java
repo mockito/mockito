@@ -15,7 +15,18 @@ import org.mockito.plugins.MockMaker;
  * <ul>
  *     <li>
  *         Loads <code>org.mockito.configuration.MockitoConfiguration</code>, which implements
- *         {@link IMockitoConfiguration}.
+ *         {@link IMockitoConfiguration}. For example
+ *         <pre class="code"><code class="java">
+ * package org.mockito.configuration;
+ *
+ * //...
+ *
+ * public class MockitoConfiguration implements IMockitoConfiguration {
+ *     public boolean cleansStackTrace() { return false; }
+ *
+ *     // ...
+ * }
+ *     </code></pre>
  *     </li>
  *     <li>
  *         Can load available mockito extensions. Currently Mockito only have one extension point the

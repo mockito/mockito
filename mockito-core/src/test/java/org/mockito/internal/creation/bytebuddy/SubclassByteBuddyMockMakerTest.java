@@ -38,22 +38,41 @@ public class SubclassByteBuddyMockMakerTest
     }
 
     @Test
+    public void can_create_mock_with_default_allocator_in_an_isolated_class_loader()
+            throws Exception {
+        ClassLoader classLoader = mockitoClassLoader().build();
+
+        Semaphore mock =
+                ClassLoaders.using(classLoader).execute(CreateMockWithDefaultAllocator.class);
+
+        assertThat(mock.getClass().getSuperclass()).isEqualTo(Semaphore.class);
+    }
+
+    public static class CreateMockWithDefaultAllocator implements Callable<Semaphore> {
+        @Override
+        public Semaphore call() {
+            return Mockito.mock(Semaphore.class, withSettings().mockMaker(MockMakers.SUBCLASS));
+        }
+    }
+
+    @Test
     public void can_create_mock_with_constructor_when_unsafe_is_unavailable() throws Exception {
-        ClassLoader classLoader =
-                ClassLoaders.excludingClassLoader()
-                        .withCodeSourceUrlOf(
-                                Mockito.class,
-                                ByteBuddy.class,
-                                ByteBuddyAgent.class,
-                                CreateMockWithConstructor.class)
-                        .withCodeSourceUrlOf(coverageTool())
-                        .without("sun.misc.Unsafe")
-                        .build();
+        ClassLoader classLoader = mockitoClassLoader().without("sun.misc.Unsafe").build();
 
         assertThatExceptionOfType(ClassNotFoundException.class)
                 .isThrownBy(() -> classLoader.loadClass("sun.misc.Unsafe"));
         assertThat(ClassLoaders.using(classLoader).execute(CreateMockWithConstructor.class))
                 .isEqualTo(3);
+    }
+
+    private static ClassLoaders.ExcludingURLClassLoaderBuilder mockitoClassLoader() {
+        return ClassLoaders.excludingClassLoader()
+                .withCodeSourceUrlOf(
+                        Mockito.class,
+                        ByteBuddy.class,
+                        ByteBuddyAgent.class,
+                        SubclassByteBuddyMockMakerTest.class)
+                .withCodeSourceUrlOf(coverageTool());
     }
 
     public static class CreateMockWithConstructor implements Callable<Integer> {

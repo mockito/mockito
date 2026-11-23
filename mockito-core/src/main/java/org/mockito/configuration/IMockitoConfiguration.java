@@ -56,7 +56,13 @@ public interface IMockitoConfiguration {
     boolean cleansStackTrace();
 
     /**
-     * Retained for compatibility. Mockito's default instantiator allocates instances without a class cache.
+     * Formerly controlled caching of Objenesis instantiators.
+     *
+     * @return {@code false} by default
+     * @deprecated Mockito ignores the return value. This method is retained for compatibility.
      */
-    boolean enableClassCache();
+    @Deprecated
+    default boolean enableClassCache() {
+        return false;
+    }
 }
