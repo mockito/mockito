@@ -6,20 +6,16 @@ package org.mockito.internal.creation.bytebuddy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
-import static org.mockitoutil.ClassLoaders.coverageTool;
 
 import java.io.Serializable;
 
-import net.bytebuddy.ByteBuddy;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.mockito.internal.creation.AbstractMockMakerTest;
 import org.mockito.internal.handler.MockHandlerImpl;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
-import org.mockitoutil.ClassLoaders;
 import org.mockitoutil.SimpleSerializationUtil;
 
 public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker>
@@ -118,28 +114,6 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker>
         public ClassWithDodgyConstructor() {
             throw new RuntimeException();
         }
-    }
-
-    @Test
-    public void instantiate_subclass_mock_maker_with_only_mockito_and_byte_buddy()
-            throws Exception {
-        // given
-        ClassLoader classLoader =
-                ClassLoaders.excludingClassLoader()
-                        .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class)
-                        .withCodeSourceUrlOf(coverageTool())
-                        .build();
-
-        Class<?> mock_maker_class_loaded_fine_until =
-                Class.forName(
-                        "org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker",
-                        true,
-                        classLoader);
-
-        // when
-        mock_maker_class_loaded_fine_until.getConstructor().newInstance();
-
-        // then everything went fine
     }
 
     private static class SampleClass {

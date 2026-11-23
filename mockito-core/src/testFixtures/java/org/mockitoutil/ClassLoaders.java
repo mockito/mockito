@@ -272,11 +272,11 @@ public abstract class ClassLoaders {
         }
 
         @Override
-        public Class<?> findClass(String name) throws ClassNotFoundException {
+        protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
             if (classShouldBeExcluded(name))
                 throw new ClassNotFoundException(
                         "classes with prefix : " + excludedPrefixes + " are excluded");
-            return super.findClass(name);
+            return super.loadClass(name, resolve);
         }
 
         private boolean classShouldBeExcluded(String name) {

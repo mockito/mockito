@@ -6,25 +6,68 @@ package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
+import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.description.modifier.TypeManifestation;
 import net.bytebuddy.dynamic.DynamicType;
 import org.junit.Test;
+import org.mockito.MockMakers;
+import org.mockito.Mockito;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.plugins.MockMaker;
+import org.mockitoutil.ClassLoaders;
 
 import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Semaphore;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.withSettings;
+import static org.mockitoutil.ClassLoaders.coverageTool;
 
 public class SubclassByteBuddyMockMakerTest
         extends AbstractByteBuddyMockMakerTest<SubclassByteBuddyMockMaker> {
 
     public SubclassByteBuddyMockMakerTest() {
         super(new SubclassByteBuddyMockMaker());
+    }
+
+    @Test
+    public void can_create_mock_with_constructor_when_unsafe_is_unavailable() throws Exception {
+        ClassLoader classLoader =
+                ClassLoaders.excludingClassLoader()
+                        .withCodeSourceUrlOf(
+                                Mockito.class,
+                                ByteBuddy.class,
+                                ByteBuddyAgent.class,
+                                CreateMockWithConstructor.class)
+                        .withCodeSourceUrlOf(coverageTool())
+                        .without("sun.misc.Unsafe")
+                        .build();
+
+        assertThatExceptionOfType(ClassNotFoundException.class)
+                .isThrownBy(() -> classLoader.loadClass("sun.misc.Unsafe"));
+        assertThat(ClassLoaders.using(classLoader).execute(CreateMockWithConstructor.class))
+                .isEqualTo(3);
+    }
+
+    public static class CreateMockWithConstructor implements Callable<Integer> {
+        @Override
+        public Integer call() {
+            Semaphore mock =
+                    Mockito.mock(
+                            Semaphore.class,
+                            withSettings()
+                                    .mockMaker(MockMakers.SUBCLASS)
+                                    .useConstructor(3)
+                                    .defaultAnswer(CALLS_REAL_METHODS));
+            return mock.availablePermits();
+        }
     }
 
     @Test

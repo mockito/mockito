@@ -6,10 +6,7 @@ package org.mockito.internal.configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.concurrent.Callable;
-
 import net.bytebuddy.ByteBuddy;
-import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -19,26 +16,30 @@ import org.mockitoutil.ClassLoaders;
 public class GlobalConfigurationTest {
     @Test
     public void returns_mockito_annotation_engine_of_Plugins_if_no_MockitoConfiguration()
-            throws Throwable {
-        ClassLoader anotherWorld =
+            throws Exception {
+        ClassLoader isolatedLoader =
                 ClassLoaders.isolatedClassLoader()
-                        .withCurrentCodeSourceUrls()
                         .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class)
                         .withPrivateCopyOf("org.mockito", "net.bytebuddy")
-                        .withCodeSourceUrlOf(Assertions.class)
-                        .withPrivateCopyOf("org.assertj")
                         .without("org.mockito.configuration.MockitoConfiguration")
                         .build();
 
-        ClassLoaders.using(anotherWorld).execute(CheckAnnotationEngine.class);
-    }
+        Thread thread = Thread.currentThread();
+        ClassLoader previousLoader = thread.getContextClassLoader();
+        thread.setContextClassLoader(isolatedLoader);
+        try {
+            Class<?> configuration = isolatedLoader.loadClass(GlobalConfiguration.class.getName());
+            Class<?> plugins = isolatedLoader.loadClass(Plugins.class.getName());
 
-    public static class CheckAnnotationEngine implements Callable<Void> {
-        @Override
-        public Void call() {
-            assertThat(new GlobalConfiguration().tryGetPluginAnnotationEngine())
-                    .isInstanceOf(Plugins.getAnnotationEngine().getClass());
-            return null;
+            Object engine =
+                    configuration
+                            .getMethod("tryGetPluginAnnotationEngine")
+                            .invoke(configuration.getConstructor().newInstance());
+            assertThat(engine)
+                    .isNotNull()
+                    .isSameAs(plugins.getMethod("getAnnotationEngine").invoke(null));
+        } finally {
+            thread.setContextClassLoader(previousLoader);
         }
     }
 

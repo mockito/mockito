@@ -13,6 +13,19 @@ import org.mockito.internal.SuppressSignatureCheck;
 
 import sun.misc.Unsafe;
 
+/**
+ * Allocates instances without invoking constructors. In JDK 28, the two-argument
+ * {@code ReflectionFactory.newConstructorForSerialization} method that Objenesis used on HotSpot
+ * is disabled by default.
+ *
+ * <p>JDK 22 reimplemented serialization constructors with method handles that allocate through
+ * {@code jdk.internal.misc.Unsafe.allocateInstance}. The {@code sun.misc.Unsafe.allocateInstance}
+ * method delegates to the same allocator. See
+ * <a href="https://github.com/openjdk/jdk/pull/15600">OpenJDK PR #15600</a>.
+ *
+ * <p>OpenJDK plans to retain {@code Unsafe.allocateInstance} for the medium term. See
+ * <a href="https://openjdk.org/jeps/471#Future-Work:~:text=allocateInstance,project">JEP 471</a>.
+ */
 @SuppressSignatureCheck
 final class UnsafeInstantiator implements Instantiator {
 
