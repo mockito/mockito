@@ -4,8 +4,6 @@
  */
 package org.mockitointegration;
 
-import static org.mockitoutil.ClassLoaders.coverageTool;
-
 import java.util.Set;
 
 import org.hamcrest.Matcher;
@@ -21,7 +19,6 @@ public class NoByteCodeDependenciesTest {
         ClassLoader classLoader_without_bytecode_libraries =
                 ClassLoaders.excludingClassLoader()
                         .withCodeSourceUrlOf(Mockito.class, Matcher.class)
-                        .withCodeSourceUrlOf(coverageTool())
                         .without("net.bytebuddy")
                         .build();
 

@@ -5,7 +5,6 @@
 package org.mockitointegration;
 
 import static org.mockito.Mockito.withSettings;
-import static org.mockitoutil.ClassLoaders.coverageTool;
 
 import java.lang.reflect.Method;
 
@@ -34,7 +33,6 @@ public class DeferMockMakersClassLoadingTest {
                                 Matcher.class,
                                 CustomMockMaker.class,
                                 Assertions.class)
-                        .withCodeSourceUrlOf(coverageTool())
                         .without(
                                 ByteBuddyMockMaker.class.getName(),
                                 SubclassByteBuddyMockMaker.class.getName(),

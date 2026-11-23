@@ -4,8 +4,6 @@
  */
 package org.mockitointegration;
 
-import static org.mockitoutil.ClassLoaders.coverageTool;
-
 import java.util.Set;
 
 import net.bytebuddy.ByteBuddy;
@@ -28,7 +26,6 @@ public class NoJUnitDependenciesTest {
                 ClassLoaders.excludingClassLoader()
                         .withCodeSourceUrlOf(
                                 Mockito.class, Matcher.class, ByteBuddy.class, ByteBuddyAgent.class)
-                        .withCodeSourceUrlOf(coverageTool())
                         .without("junit", "org.junit", "org.opentest4j")
                         .build();
 

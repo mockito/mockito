@@ -72,23 +72,6 @@ public abstract class ClassLoaders {
 
     public abstract ClassLoader build();
 
-    public static Class<?>[] coverageTool() {
-        HashSet<Class<?>> classes = new HashSet<Class<?>>();
-        classes.add(safeGetClass("net.sourceforge.cobertura.coveragedata.TouchCollector"));
-        classes.add(safeGetClass("org.slf4j.LoggerFactory"));
-
-        classes.remove(null);
-        return classes.toArray(new Class<?>[classes.size()]);
-    }
-
-    private static Class<?> safeGetClass(String className) {
-        try {
-            return Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
-    }
-
     public static ClassLoaderExecutor using(final ClassLoader classLoader) {
         return new ClassLoaderExecutor(classLoader);
     }
