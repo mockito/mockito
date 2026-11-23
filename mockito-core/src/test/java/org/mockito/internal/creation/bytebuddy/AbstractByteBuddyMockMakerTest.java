@@ -21,7 +21,6 @@ import org.mockito.mock.SerializableMode;
 import org.mockito.plugins.MockMaker;
 import org.mockitoutil.ClassLoaders;
 import org.mockitoutil.SimpleSerializationUtil;
-import org.objenesis.ObjenesisStd;
 
 public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker>
         extends AbstractMockMakerTest<MM, AbstractByteBuddyMockMakerTest.SomeClass> {
@@ -122,11 +121,12 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker>
     }
 
     @Test
-    public void instantiate_fine_when_objenesis_on_the_classpath() throws Exception {
+    public void instantiate_subclass_mock_maker_with_only_mockito_and_byte_buddy()
+            throws Exception {
         // given
-        ClassLoader classpath_with_objenesis =
+        ClassLoader classLoader =
                 ClassLoaders.excludingClassLoader()
-                        .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class, ObjenesisStd.class)
+                        .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class)
                         .withCodeSourceUrlOf(coverageTool())
                         .build();
 
@@ -134,7 +134,7 @@ public abstract class AbstractByteBuddyMockMakerTest<MM extends MockMaker>
                 Class.forName(
                         "org.mockito.internal.creation.bytebuddy.SubclassByteBuddyMockMaker",
                         true,
-                        classpath_with_objenesis);
+                        classLoader);
 
         // when
         mock_maker_class_loaded_fine_until.getConstructor().newInstance();

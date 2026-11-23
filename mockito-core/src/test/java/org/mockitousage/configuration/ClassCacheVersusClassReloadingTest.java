@@ -9,7 +9,6 @@ import static org.mockito.Mockito.mock;
 import java.util.concurrent.Callable;
 
 import org.junit.Test;
-import org.mockito.internal.configuration.ConfigurationAccess;
 import org.mockitoutil.SimplePerRealmReloadingClassLoader;
 
 public class ClassCacheVersusClassReloadingTest {
@@ -19,10 +18,7 @@ public class ClassCacheVersusClassReloadingTest {
             new SimplePerRealmReloadingClassLoader(reloadMockito());
 
     @Test
-    public void should_not_throw_ClassCastException_when_objenesis_cache_disabled()
-            throws Exception {
-        prepareMockitoAndDisableObjenesisCache();
-
+    public void can_mock_classes_with_the_same_name_in_different_class_loaders() throws Exception {
         doInNewChildRealm(
                 testMethodClassLoaderRealm,
                 "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$DoTheMocking");
@@ -55,19 +51,6 @@ public class ClassCacheVersusClassReloadingTest {
                         || "org.mockitousage.configuration.ClassToBeMocked".equals(qualifiedName);
             }
         };
-    }
-
-    private void prepareMockitoAndDisableObjenesisCache() throws Exception {
-        testMethodClassLoaderRealm.doInRealm(
-                "org.mockitousage.configuration.ClassCacheVersusClassReloadingTest$PrepareMockito");
-    }
-
-    public static class PrepareMockito implements Callable<Boolean> {
-        public Boolean call() throws Exception {
-            Class.forName("org.mockito.Mockito");
-            ConfigurationAccess.getConfig().overrideEnableClassCache(false);
-            return Boolean.TRUE;
-        }
     }
 
     private static SimplePerRealmReloadingClassLoader.ReloadClassPredicate reloadMockito() {

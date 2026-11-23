@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.ClassLoaders;
-import org.objenesis.Objenesis;
 
 public class NoJUnitDependenciesTest {
 
@@ -28,11 +27,7 @@ public class NoJUnitDependenciesTest {
         ClassLoader classLoader_without_JUnit =
                 ClassLoaders.excludingClassLoader()
                         .withCodeSourceUrlOf(
-                                Mockito.class,
-                                Matcher.class,
-                                ByteBuddy.class,
-                                ByteBuddyAgent.class,
-                                Objenesis.class)
+                                Mockito.class, Matcher.class, ByteBuddy.class, ByteBuddyAgent.class)
                         .withCodeSourceUrlOf(coverageTool())
                         .without("junit", "org.junit", "org.opentest4j")
                         .build();

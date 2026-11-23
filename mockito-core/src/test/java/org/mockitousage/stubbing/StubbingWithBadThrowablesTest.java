@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockitoutil.TestBase;
-import org.objenesis.ObjenesisException;
 
 // issue 1514
 @SuppressWarnings({"serial", "unchecked", "rawtypes"})
@@ -30,15 +29,7 @@ public class StubbingWithBadThrowablesTest extends TestBase {
                                 doThrow(UninstantiableException.class).when(mock).clear();
                             }
                         })
-                .satisfiesAnyOf(
-                        throwable ->
-                                Assertions.assertThat(throwable)
-                                        .isInstanceOf(InstantiationError.class),
-                        // Java 25 wraps the failed reflective instantiation in ObjenesisException.
-                        throwable ->
-                                Assertions.assertThat(throwable)
-                                        .isInstanceOf(ObjenesisException.class)
-                                        .hasRootCauseInstanceOf(InstantiationException.class));
+                .hasRootCauseInstanceOf(InstantiationException.class);
 
         // ensure that the state is cleaned
         Mockito.validateMockitoUsage();

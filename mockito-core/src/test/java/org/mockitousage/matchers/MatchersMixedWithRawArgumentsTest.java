@@ -20,7 +20,7 @@ public class MatchersMixedWithRawArgumentsTest extends TestBase {
 
     // description of an idea:
     // types of arguments and descriptor value that identifies matcher:
-    // Object: objenesis instance to check for identity
+    // Object: sentinel instance to check for identity
     // boolean: false
     // byte: max-1
     // short: max-1
@@ -30,7 +30,7 @@ public class MatchersMixedWithRawArgumentsTest extends TestBase {
     // double: max-1
     // float: max-1
 
-    // 1. how objenesis deal with primitive arrays (like byte[])?
+    // 1. how should a sentinel work for primitive arrays (like byte[])?
     // 2. Analisys of all matchers used by R2 project finished before any() and so far proves
     // it's a good idea.
 

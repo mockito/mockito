@@ -22,17 +22,13 @@ public class NoByteCodeDependenciesTest {
                 ClassLoaders.excludingClassLoader()
                         .withCodeSourceUrlOf(Mockito.class, Matcher.class)
                         .withCodeSourceUrlOf(coverageTool())
-                        .without("net.bytebuddy", "org.objenesis")
+                        .without("net.bytebuddy")
                         .build();
 
         Set<String> pureMockitoAPIClasses =
                 ClassLoaders.in(classLoader_without_bytecode_libraries)
                         .omit("bytebuddy", "runners", "junit", "JUnit", "opentest4j")
                         .listOwnedClasses();
-        pureMockitoAPIClasses.remove(
-                "org.mockito.internal.creation.instance.DefaultInstantiatorProvider");
-        pureMockitoAPIClasses.remove(
-                "org.mockito.internal.creation.instance.ObjenesisInstantiator");
 
         // Remove classes that trigger plugin-loading, since bytebuddy plugins are the default.
         pureMockitoAPIClasses.remove("org.mockito.internal.debugging.LocationImpl");
@@ -47,8 +43,7 @@ public class NoByteCodeDependenciesTest {
         pureMockitoAPIClasses.remove("module-info");
 
         ClassLoadabilityChecker checker =
-                new ClassLoadabilityChecker(
-                        classLoader_without_bytecode_libraries, "ByteBuddy or Objenesis");
+                new ClassLoadabilityChecker(classLoader_without_bytecode_libraries, "Byte Buddy");
         for (String pureMockitoAPIClass : pureMockitoAPIClasses) {
             checker.checkLoadability(pureMockitoAPIClass);
         }

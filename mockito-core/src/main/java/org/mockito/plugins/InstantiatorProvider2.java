@@ -13,7 +13,7 @@ import org.mockito.mock.MockCreationSettings;
  * </p>
  *
  * <p>
- *     By default, an internal byte-buddy/asm/objenesis based implementation is used.
+ *     The default provider supports invoking a constructor or allocating an instance without invoking one.
  * </p>
  *
  * <h3>Using the extension point</h3>

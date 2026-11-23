@@ -226,10 +226,7 @@ public class ReturnsEmptyValuesTest extends TestBase {
      * Checks if the current Java version is at least the specified version.
      */
     private boolean isJavaVersionAtLeast(int majorVersion) {
-        String javaVersion = System.getProperty("java.version");
-        String[] versionParts = javaVersion.split("\\.");
-        int currentMajorVersion = Integer.parseInt(versionParts[0]);
-        return currentMajorVersion >= majorVersion;
+        return Runtime.version().feature() >= majorVersion;
     }
 
     interface ReturnFuture {

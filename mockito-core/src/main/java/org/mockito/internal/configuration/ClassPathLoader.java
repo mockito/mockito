@@ -23,7 +23,7 @@ import org.mockito.plugins.MockMaker;
  * //...
  *
  * public class MockitoConfiguration implements IMockitoConfiguration {
- *     boolean enableClassCache() { return false; }
+ *     public boolean cleansStackTrace() { return false; }
  *
  *     // ...
  * }

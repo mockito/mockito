@@ -15,8 +15,6 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration
 
     private org.mockito.plugins.AnnotationEngine overriddenEngine;
 
-    private boolean enableClassCache = true;
-
     // for testing purposes, allow to override the configuration
     public void overrideDefaultAnswer(Answer<Object> defaultAnswer) {
         this.overriddenDefaultAnswer = defaultAnswer;
@@ -32,11 +30,6 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration
         this.overriddenEngine = engine;
     }
 
-    // for testing purposes, allow to override the annotation engine
-    public void overrideEnableClassCache(boolean enableClassCache) {
-        this.enableClassCache = enableClassCache;
-    }
-
     @Override
     public Answer<Object> getDefaultAnswer() {
         if (overriddenDefaultAnswer == null) {
@@ -49,10 +42,5 @@ public class MockitoConfiguration extends DefaultMockitoConfiguration
     @Override
     public boolean cleansStackTrace() {
         return cleansStackTrace;
-    }
-
-    @Override
-    public boolean enableClassCache() {
-        return enableClassCache;
     }
 }

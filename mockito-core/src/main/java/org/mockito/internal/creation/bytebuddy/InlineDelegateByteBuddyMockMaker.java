@@ -402,8 +402,7 @@ class InlineDelegateByteBuddyMockMaker
                                 .newInstance(type);
             } else {
                 try {
-                    // We attempt to use the "native" mock maker first that avoids
-                    // Objenesis and Unsafe
+                    // Try the instrumented constructor before falling back to the instantiator.
                     instance = newInstance(type);
                 } catch (InstantiationException ignored) {
                     if (nullOnNonInlineConstruction) {

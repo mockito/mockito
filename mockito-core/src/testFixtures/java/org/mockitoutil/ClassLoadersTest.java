@@ -12,7 +12,7 @@ import static org.mockitoutil.ClassLoaders.excludingClassLoader;
 import static org.mockitoutil.ClassLoaders.isolatedClassLoader;
 import static org.mockitoutil.ClassLoaders.jdkClassLoader;
 
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.Callable;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -295,45 +295,21 @@ public class ClassLoadersTest {
                         .without(AClass.class.getName())
                         .build();
 
-        final AtomicBoolean executed = new AtomicBoolean(false);
+        assertThat(ClassLoaders.using(cl).execute(LoadClasses.class)).isSameAs(cl);
+    }
 
-        // when
-        ClassLoaders.using(cl)
-                .execute(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                assertThat(this.getClass().getClassLoader())
-                                        .describedAs("runnable is reloaded in given classloader")
-                                        .isEqualTo(cl);
-                                assertThat(Thread.currentThread().getContextClassLoader())
-                                        .describedAs(
-                                                "Thread context classloader is using given classloader")
-                                        .isEqualTo(cl);
-
-                                try {
-                                    assertThat(
-                                                    Thread.currentThread()
-                                                            .getContextClassLoader()
-                                                            .loadClass("java.lang.String"))
-                                            .describedAs("can load JDK type")
-                                            .isNotNull();
-                                    assertThat(
-                                                    Thread.currentThread()
-                                                            .getContextClassLoader()
-                                                            .loadClass(
-                                                                    "org.mockitoutil.ClassLoadersTest$ClassUsingInterface1"))
-                                            .describedAs("can load classloader types")
-                                            .isNotNull();
-                                } catch (ClassNotFoundException cnfe) {
-                                    Assertions.fail("should not have raised a CNFE", cnfe);
-                                }
-                                executed.set(true);
-                            }
-                        });
-
-        // then
-        assertThat(executed.get()).isEqualTo(true);
+    public static class LoadClasses implements Callable<ClassLoader> {
+        @Override
+        public ClassLoader call() throws ClassNotFoundException {
+            ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
+            assertThat(contextLoader).isSameAs(getClass().getClassLoader());
+            assertThat(contextLoader.loadClass("java.lang.String")).isNotNull();
+            assertThat(
+                            contextLoader.loadClass(
+                                    "org.mockitoutil.ClassLoadersTest$ClassUsingInterface1"))
+                    .isNotNull();
+            return contextLoader;
+        }
     }
 
     @Test
@@ -349,20 +325,21 @@ public class ClassLoadersTest {
 
         // when
         try {
-            ClassLoaders.using(cl)
-                    .execute(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    AClass cant_be_found = new AClass();
-                                }
-                            });
+            ClassLoaders.using(cl).execute(LoadExcludedClass.class);
             Assertions.fail("should have raised a ClassNotFoundException");
         } catch (IllegalStateException ise) {
             // then
             assertThat(ise)
                     .hasCauseInstanceOf(NoClassDefFoundError.class)
                     .hasMessageContaining("AClass");
+        }
+    }
+
+    public static class LoadExcludedClass implements Callable<Void> {
+        @Override
+        public Void call() {
+            new AClass();
+            return null;
         }
     }
 

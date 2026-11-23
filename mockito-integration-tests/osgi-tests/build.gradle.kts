@@ -28,7 +28,6 @@ val (testBundle, testBundleTask) = configureOsgiBundle(project, "testBundle") {
 dependencies {
     testRuntimeBundles(project(":mockito-core"))
     testRuntimeBundles(libs.bytebuddy)
-    testRuntimeBundles(libs.objenesis)
 
     testRuntimeBundles(testBundleTask.map { it.outputs.files })
     testRuntimeBundles(otherBundleTask.map { it.outputs.files })

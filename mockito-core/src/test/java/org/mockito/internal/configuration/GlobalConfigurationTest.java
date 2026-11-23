@@ -6,6 +6,8 @@ package org.mockito.internal.configuration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.concurrent.Callable;
+
 import net.bytebuddy.ByteBuddy;
 import org.assertj.core.api.Assertions;
 import org.junit.After;
@@ -13,7 +15,6 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.ClassLoaders;
-import org.objenesis.Objenesis;
 
 public class GlobalConfigurationTest {
     @Test
@@ -22,22 +23,23 @@ public class GlobalConfigurationTest {
         ClassLoader anotherWorld =
                 ClassLoaders.isolatedClassLoader()
                         .withCurrentCodeSourceUrls()
-                        .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class, Objenesis.class)
-                        .withPrivateCopyOf("org.mockito", "net.bytebuddy", "org.objenesis")
+                        .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class)
+                        .withPrivateCopyOf("org.mockito", "net.bytebuddy")
                         .withCodeSourceUrlOf(Assertions.class)
                         .withPrivateCopyOf("org.assertj")
                         .without("org.mockito.configuration.MockitoConfiguration")
                         .build();
 
-        ClassLoaders.using(anotherWorld)
-                .execute(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                assertThat(new GlobalConfiguration().tryGetPluginAnnotationEngine())
-                                        .isInstanceOf(Plugins.getAnnotationEngine().getClass());
-                            }
-                        });
+        ClassLoaders.using(anotherWorld).execute(CheckAnnotationEngine.class);
+    }
+
+    public static class CheckAnnotationEngine implements Callable<Void> {
+        @Override
+        public Void call() {
+            assertThat(new GlobalConfiguration().tryGetPluginAnnotationEngine())
+                    .isInstanceOf(Plugins.getAnnotationEngine().getClass());
+            return null;
+        }
     }
 
     @After

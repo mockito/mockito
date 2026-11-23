@@ -12,8 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.StackWalker.Option;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -31,17 +29,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
-
-import org.mockito.internal.configuration.plugins.Plugins;
-import org.mockito.plugins.MemberAccessor;
-import org.objenesis.Objenesis;
-import org.objenesis.ObjenesisStd;
-import org.objenesis.instantiator.ObjectInstantiator;
 
 public abstract class ClassLoaders {
     protected ClassLoader parent = currentClassLoader();
@@ -100,46 +92,42 @@ public abstract class ClassLoaders {
     }
 
     public static class ClassLoaderExecutor {
-        private ClassLoader classLoader;
+        private final ClassLoader classLoader;
 
         public ClassLoaderExecutor(ClassLoader classLoader) {
             this.classLoader = classLoader;
         }
 
-        public void execute(final Runnable task) throws Exception {
+        public <T> T execute(Class<? extends Callable<T>> task) throws Exception {
             ExecutorService executorService =
                     Executors.newSingleThreadExecutor(
-                            new ThreadFactory() {
-                                @Override
-                                public Thread newThread(Runnable r) {
-                                    Thread thread = Executors.defaultThreadFactory().newThread(r);
-                                    thread.setContextClassLoader(classLoader);
-                                    return thread;
-                                }
+                            r -> {
+                                Thread thread = Executors.defaultThreadFactory().newThread(r);
+                                thread.setContextClassLoader(classLoader);
+                                return thread;
                             });
             try {
-                Future<?> taskFuture =
+                Future<T> taskFuture =
                         executorService.submit(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            reloadTaskInClassLoader(task).run();
-                                        } catch (Throwable throwable) {
-                                            throw new IllegalStateException(
-                                                    format(
-                                                            "Given task could not be loaded properly in the given classloader '%s', error '%s",
-                                                            task, throwable.getMessage()),
-                                                    throwable);
-                                        }
+                                () -> {
+                                    try {
+                                        return reloadTaskInClassLoader(task).call();
+                                    } catch (Throwable throwable) {
+                                        throw new IllegalStateException(
+                                                format(
+                                                        "Given task could not be loaded properly in the given classloader '%s', error '%s",
+                                                        task, throwable.getMessage()),
+                                                throwable);
                                     }
                                 });
-                taskFuture.get();
-                executorService.shutdownNow();
+                return taskFuture.get();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                throw e;
             } catch (ExecutionException e) {
                 throw this.<Exception>unwrapAndThrows(e);
+            } finally {
+                executorService.shutdownNow();
             }
         }
 
@@ -148,41 +136,15 @@ public abstract class ClassLoaders {
             throw (T) ex.getCause();
         }
 
-        Runnable reloadTaskInClassLoader(Runnable task) {
-            try {
-                @SuppressWarnings("unchecked")
-                Class<Runnable> taskClassReloaded =
-                        (Class<Runnable>) classLoader.loadClass(task.getClass().getName());
-
-                Objenesis objenesis = new ObjenesisStd();
-                ObjectInstantiator<Runnable> thingyInstantiator =
-                        objenesis.getInstantiatorOf(taskClassReloaded);
-                Runnable reloaded = thingyInstantiator.newInstance();
-
-                // lenient shallow copy of class compatible fields
-                for (Field field : task.getClass().getDeclaredFields()) {
-                    Field declaredField = taskClassReloaded.getDeclaredField(field.getName());
-                    int modifiers = declaredField.getModifiers();
-                    if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
-                        // Skip static final fields (e.g. jacoco fields)
-                        // otherwise IllegalAccessException (can be bypassed with Unsafe though)
-                        // We may also miss coverage data.
-                        continue;
-                    }
-                    if (declaredField.getType() == field.getType()) { // don't copy this
-                        MemberAccessor accessor = Plugins.getMemberAccessor();
-                        accessor.set(declaredField, reloaded, accessor.get(field, task));
-                    }
-                }
-
-                return reloaded;
-            } catch (ClassNotFoundException e) {
-                throw new IllegalStateException(e);
-            } catch (IllegalAccessException e) {
-                throw new IllegalStateException(e);
-            } catch (NoSuchFieldException e) {
-                throw new IllegalStateException(e);
-            }
+        @SuppressWarnings("unchecked")
+        private <T> Callable<T> reloadTaskInClassLoader(Class<? extends Callable<T>> task)
+                throws ReflectiveOperationException {
+            return (Callable<T>)
+                    classLoader
+                            .loadClass(task.getName())
+                            .asSubclass(Callable.class)
+                            .getConstructor()
+                            .newInstance();
         }
     }
 

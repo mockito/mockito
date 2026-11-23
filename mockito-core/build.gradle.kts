@@ -40,14 +40,12 @@ dependencies {
     compileOnly(libs.hamcrest)
     compileOnly(libs.opentest4j)
     compileOnly(libs.jspecify)
-    implementation(libs.objenesis)
 
     testImplementation(libs.assertj)
     testImplementation(libs.junit5.api)
     testImplementation(libs.junit5.params)
 
     testFixturesImplementation(libs.assertj)
-    testFixturesImplementation(libs.objenesis)
     testFixturesCompileOnly(libs.junit4)
     testFixturesCompileOnly(libs.junit5.api)
 }
@@ -128,7 +126,7 @@ tasks {
                 # Bnd instructions for the Mockito core bundle.
 
                 # Set a bundle name slightly different from project description.
-                Bundle-Name: Mockito Mock Library for Java. Core bundle requires Byte Buddy and Objenesis.
+                Bundle-Name: Mockito Mock Library for Java. Core bundle requires Byte Buddy.
 
                 # Set the Bundle-SymbolicName to "org.mockito.mockito-core".
                 # Otherwise bnd plugin will use archiveClassifier by default.
@@ -162,7 +160,7 @@ tasks {
                     junit.*;resolution:=optional, \
                     org.junit.*;resolution:=optional, \
                     org.hamcrest;resolution:=optional, \
-                    org.objenesis;version="[3.1,4.0)", \
+                    sun.misc;resolution:=optional, \
                     org.opentest4j.*;resolution:=optional, \
                     !org.mockito.internal.creation.bytebuddy.inject,org.mockito.*
 

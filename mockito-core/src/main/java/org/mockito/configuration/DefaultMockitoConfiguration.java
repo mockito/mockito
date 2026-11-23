@@ -29,9 +29,10 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
         return true;
     }
 
-    /* (non-Javadoc)
-     * @see org.mockito.configuration.IMockitoConfiguration#enableClassCache()
+    /**
+     * @deprecated Retained for compatibility. See {@link IMockitoConfiguration#enableClassCache()}.
      */
+    @Deprecated
     @Override
     public boolean enableClassCache() {
         return true;
