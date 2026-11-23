@@ -5,6 +5,7 @@
 package org.mockitousage.spies;
 
 import static net.bytebuddy.ClassFileVersion.JAVA_V21;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
@@ -20,7 +21,6 @@ import static org.mockito.Mockito.withSettings;
 import static org.mockitoutil.Conditions.methodsInStackTrace;
 
 import net.bytebuddy.ClassFileVersion;
-import org.assertj.core.api.Assertions;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
@@ -94,8 +94,8 @@ public class PartialMockingWithSpiesTest extends TestBase {
 
         doReturn("stubbed").when(subclassSpy).howMuchDidYouInherit();
 
-        Assertions.assertThat(subclassSpy.getName()).isEqualTo("Default name");
-        Assertions.assertThat(subclassSpy.howMuchDidYouInherit()).isEqualTo("stubbed");
+        assertThat(subclassSpy.getName()).isEqualTo("Default name");
+        assertThat(subclassSpy.howMuchDidYouInherit()).isEqualTo("stubbed");
     }
 
     @Test
@@ -143,7 +143,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
             fail();
         } catch (Throwable t) {
             // then
-            Assertions.assertThat(t)
+            assertThat(t)
                     .has(
                             methodsInStackTrace(
                                     "throwSomeException",
@@ -164,7 +164,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
             fail();
         } catch (Throwable t) {
             // then
-            Assertions.assertThat(t)
+            assertThat(t)
                     .has(
                             methodsInStackTrace(
                                     "throwSomeException",
@@ -189,7 +189,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
             fail();
         } catch (Throwable t) {
             // then
-            Assertions.assertThat(t)
+            assertThat(t)
                     .has(
                             methodsInStackTrace(
                                     "throwSomeException",

@@ -97,10 +97,6 @@ public abstract class ClassLoaders {
             this.classLoader = classLoader;
         }
 
-        public <T> T execute(Class<? extends Callable<T>> task) throws Exception {
-            return execute(() -> reloadTaskInClassLoader(task).call());
-        }
-
         public <T> T execute(Callable<T> task) throws Exception {
             ExecutorService executorService =
                     Executors.newSingleThreadExecutor(
@@ -124,17 +120,6 @@ public abstract class ClassLoaders {
             } finally {
                 executorService.shutdownNow();
             }
-        }
-
-        @SuppressWarnings("unchecked")
-        private <T> Callable<T> reloadTaskInClassLoader(Class<? extends Callable<T>> task)
-                throws ReflectiveOperationException {
-            return (Callable<T>)
-                    classLoader
-                            .loadClass(task.getName())
-                            .asSubclass(Callable.class)
-                            .getConstructor()
-                            .newInstance();
         }
     }
 

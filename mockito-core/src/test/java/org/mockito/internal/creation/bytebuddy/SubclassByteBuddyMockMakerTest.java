@@ -11,9 +11,11 @@ import net.bytebuddy.description.modifier.TypeManifestation;
 import net.bytebuddy.dynamic.DynamicType;
 import org.junit.Test;
 import org.mockito.MockMakers;
+import org.mockito.MockSettings;
 import org.mockito.Mockito;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.plugins.MockMaker;
+import org.mockito.stubbing.Answer;
 import org.mockitoutil.ClassLoaders;
 
 import java.io.Serializable;
@@ -21,13 +23,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Semaphore;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.Mockito.CALLS_REAL_METHODS;
-import static org.mockito.Mockito.withSettings;
 import static org.mockitoutil.ClassLoaders.coverageTool;
 
 public class SubclassByteBuddyMockMakerTest
@@ -42,17 +41,9 @@ public class SubclassByteBuddyMockMakerTest
             throws Exception {
         ClassLoader classLoader = mockitoClassLoader().build();
 
-        Semaphore mock =
-                ClassLoaders.using(classLoader).execute(CreateMockWithDefaultAllocator.class);
+        Semaphore mock = ClassLoaders.using(classLoader).execute(() -> mockSemaphore(classLoader));
 
         assertThat(mock.getClass().getSuperclass()).isEqualTo(Semaphore.class);
-    }
-
-    public static class CreateMockWithDefaultAllocator implements Callable<Semaphore> {
-        @Override
-        public Semaphore call() {
-            return Mockito.mock(Semaphore.class, withSettings().mockMaker(MockMakers.SUBCLASS));
-        }
     }
 
     @Test
@@ -61,32 +52,38 @@ public class SubclassByteBuddyMockMakerTest
 
         assertThatExceptionOfType(ClassNotFoundException.class)
                 .isThrownBy(() -> classLoader.loadClass("sun.misc.Unsafe"));
-        assertThat(ClassLoaders.using(classLoader).execute(CreateMockWithConstructor.class))
-                .isEqualTo(3);
+        int permits =
+                ClassLoaders.using(classLoader)
+                        .execute(() -> mockSemaphore(classLoader, 3).availablePermits());
+
+        assertThat(permits).isEqualTo(3);
     }
 
     private static ClassLoaders.ExcludingURLClassLoaderBuilder mockitoClassLoader() {
         return ClassLoaders.excludingClassLoader()
-                .withCodeSourceUrlOf(
-                        Mockito.class,
-                        ByteBuddy.class,
-                        ByteBuddyAgent.class,
-                        SubclassByteBuddyMockMakerTest.class)
+                .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class, ByteBuddyAgent.class)
                 .withCodeSourceUrlOf(coverageTool());
     }
 
-    public static class CreateMockWithConstructor implements Callable<Integer> {
-        @Override
-        public Integer call() {
-            Semaphore mock =
-                    Mockito.mock(
-                            Semaphore.class,
-                            withSettings()
-                                    .mockMaker(MockMakers.SUBCLASS)
-                                    .useConstructor(3)
-                                    .defaultAnswer(CALLS_REAL_METHODS));
-            return mock.availablePermits();
+    private static Semaphore mockSemaphore(ClassLoader classLoader, Object... constructorArgs)
+            throws ReflectiveOperationException {
+        // Resolve Mockito and its settings API in the isolated loader used by the test.
+        Class<?> mockito = classLoader.loadClass(Mockito.class.getName());
+        Class<?> settingsType = classLoader.loadClass(MockSettings.class.getName());
+        Object settings = mockito.getMethod("withSettings").invoke(null);
+        settingsType.getMethod("mockMaker", String.class).invoke(settings, MockMakers.SUBCLASS);
+        if (constructorArgs.length > 0) {
+            settingsType
+                    .getMethod("useConstructor", Object[].class)
+                    .invoke(settings, (Object) constructorArgs);
+            Class<?> answerType = classLoader.loadClass(Answer.class.getName());
+            settingsType
+                    .getMethod("defaultAnswer", answerType)
+                    .invoke(settings, mockito.getField("CALLS_REAL_METHODS").get(null));
         }
+        return (Semaphore)
+                mockito.getMethod("mock", Class.class, settingsType)
+                        .invoke(null, Semaphore.class, settings);
     }
 
     @Test

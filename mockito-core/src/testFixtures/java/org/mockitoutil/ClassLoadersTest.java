@@ -4,6 +4,7 @@
  */
 package org.mockitoutil;
 
+import static java.lang.Thread.currentThread;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
@@ -12,9 +13,6 @@ import static org.mockitoutil.ClassLoaders.excludingClassLoader;
 import static org.mockitoutil.ClassLoaders.isolatedClassLoader;
 import static org.mockitoutil.ClassLoaders.jdkClassLoader;
 
-import java.util.concurrent.Callable;
-
-import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -285,62 +283,50 @@ public class ClassLoadersTest {
 
     @Test
     public void can_run_in_given_classloader() throws Exception {
-        // given
-        final ClassLoader cl =
+        ClassLoader cl =
                 isolatedClassLoader()
                         .withCurrentCodeSourceUrls()
-                        .withCodeSourceUrlOf(Assertions.class)
-                        .withPrivateCopyOf("org.assertj.core")
-                        .withPrivateCopyOf(ClassLoadersTest.class.getPackage().getName())
-                        .without(AClass.class.getName())
+                        .withPrivateCopyOf(CLASS_NAME_DEPENDING_ON_INTERFACE, INTERFACE_NAME)
                         .build();
 
-        assertThat(ClassLoaders.using(cl).execute(LoadClasses.class)).isSameAs(cl);
-    }
+        Class<?> loadedClass =
+                ClassLoaders.using(cl)
+                        .execute(
+                                () -> {
+                                    ClassLoader contextLoader =
+                                            currentThread().getContextClassLoader();
+                                    assertThat(contextLoader).isSameAs(cl);
+                                    assertThat(contextLoader.loadClass(String.class.getName()))
+                                            .isSameAs(String.class);
+                                    return contextLoader.loadClass(
+                                            CLASS_NAME_DEPENDING_ON_INTERFACE);
+                                });
 
-    public static class LoadClasses implements Callable<ClassLoader> {
-        @Override
-        public ClassLoader call() throws ClassNotFoundException {
-            ClassLoader contextLoader = Thread.currentThread().getContextClassLoader();
-            assertThat(contextLoader).isSameAs(getClass().getClassLoader());
-            assertThat(contextLoader.loadClass("java.lang.String")).isNotNull();
-            assertThat(
-                            contextLoader.loadClass(
-                                    "org.mockitoutil.ClassLoadersTest$ClassUsingInterface1"))
-                    .isNotNull();
-            return contextLoader;
-        }
+        assertThat(loadedClass.getClassLoader()).isSameAs(cl);
     }
 
     @Test
-    public void cannot_load_runnable_in_given_classloader_if_some_type_cant_be_loaded()
-            throws Exception {
-        // given
-        final ClassLoader cl =
+    public void cannot_load_class_from_task_when_dependency_is_excluded() {
+        ClassLoader cl =
                 isolatedClassLoader()
                         .withCurrentCodeSourceUrls()
-                        .withPrivateCopyOf(ClassLoadersTest.class.getPackage().getName())
-                        .without(AClass.class.getName())
+                        .withPrivateCopyOf(CLASS_NAME_DEPENDING_ON_INTERFACE, INTERFACE_NAME)
+                        .without(INTERFACE_NAME)
                         .build();
 
-        // when
-        try {
-            ClassLoaders.using(cl).execute(LoadExcludedClass.class);
-            Assertions.fail("should have raised a ClassNotFoundException");
-        } catch (IllegalStateException ise) {
-            // then
-            assertThat(ise)
-                    .hasCauseInstanceOf(NoClassDefFoundError.class)
-                    .hasMessageContaining("AClass");
-        }
-    }
-
-    public static class LoadExcludedClass implements Callable<Void> {
-        @Override
-        public Void call() {
-            new AClass();
-            return null;
-        }
+        var executor = ClassLoaders.using(cl);
+        assertThatThrownBy(
+                        () ->
+                                executor.execute(
+                                        () -> {
+                                            ClassLoader contextLoader =
+                                                    currentThread().getContextClassLoader();
+                                            return contextLoader.loadClass(
+                                                    CLASS_NAME_DEPENDING_ON_INTERFACE);
+                                        }))
+                .isInstanceOf(IllegalStateException.class)
+                .hasCauseInstanceOf(NoClassDefFoundError.class)
+                .hasMessageContaining("ClassLoadersTest$Interface1");
     }
 
     @SuppressWarnings("unused")
