@@ -125,4 +125,35 @@ class SuspendTest {
         assertThat(mockClass.fetch(), IsEqual(10))
         verify(mockClass).fetch()
     }
+
+    interface SuspendablePrimitives {
+        suspend fun provideBoolean(): Boolean
+        suspend fun provideInt(): Int
+        suspend fun provideNullableBoolean(): Boolean?
+    }
+
+    @Test
+    fun shouldReturnDefaultPrimitiveValueForUnstubbedSuspendFunction() = runBlocking<Unit> {
+        val mock = mock(SuspendablePrimitives::class.java)
+        val booleanResult: Boolean = mock.provideBoolean()
+        val intResult: Int = mock.provideInt()
+        assertThat(booleanResult, IsEqual(false))
+        assertThat(intResult, IsEqual(0))
+    }
+
+    @Test
+    fun shouldNotThrowWhenUsingResultOfVerifiedSuspendFunction() = runBlocking<Unit> {
+        val mock = mock(SuspendablePrimitives::class.java)
+        val booleanResult: Boolean = verify(mock, never()).provideBoolean()
+        val intResult: Int = verify(mock, never()).provideInt()
+        assertThat(booleanResult, IsEqual(false))
+        assertThat(intResult, IsEqual(0))
+    }
+
+    @Test
+    fun shouldReturnStubbedNullForNullableSuspendFunction() = runBlocking<Unit> {
+        val mock = mock(SuspendablePrimitives::class.java)
+        `when`(mock.provideNullableBoolean()).thenReturn(null)
+        assertThat(mock.provideNullableBoolean(), IsEqual(null))
+    }
 }

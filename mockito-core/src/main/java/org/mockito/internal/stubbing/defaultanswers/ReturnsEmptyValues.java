@@ -37,6 +37,7 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
+import org.mockito.internal.creation.SuspendMethod;
 import org.mockito.internal.util.MockUtil;
 import org.mockito.internal.util.Primitives;
 import org.mockito.invocation.InvocationOnMock;
@@ -104,6 +105,11 @@ public class ReturnsEmptyValues implements Answer<Object>, Serializable {
             // value because they are not the same. Hence we return 1 (anything but 0 is good).
             // Only for compareTo() method by the Comparable interface
             return invocation.getMock() == invocation.getArgument(0) ? 0 : 1;
+        }
+
+        Object suspendDefault = SuspendMethod.defaultPrimitiveReturnValue(invocation.getMethod());
+        if (suspendDefault != null) {
+            return suspendDefault;
         }
 
         Class<?> returnType = invocation.getMethod().getReturnType();
