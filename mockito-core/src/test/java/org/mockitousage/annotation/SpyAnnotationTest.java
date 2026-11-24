@@ -336,6 +336,68 @@ public class SpyAnnotationTest extends TestBase {
         }
     }
 
+    @Test
+    public void should_clear_auto_initialized_spy_on_close() throws Exception {
+        class WithAutoInitializedSpy {
+            @Spy private ArrayList<String> list;
+        }
+
+        WithAutoInitializedSpy holder = new WithAutoInitializedSpy();
+        ArrayList<String> firstSpy;
+
+        try (AutoCloseable ignored = MockitoAnnotations.openMocks(holder)) {
+            assertThat(holder.list).isNotNull().isEmpty();
+            firstSpy = holder.list;
+            holder.list.add("first");
+            assertThat(holder.list).containsExactly("first");
+        }
+
+        assertThat(holder.list).isNull();
+
+        try (AutoCloseable ignored = MockitoAnnotations.openMocks(holder)) {
+            assertThat(holder.list).isNotNull().isNotSameAs(firstSpy).isEmpty();
+        }
+
+        assertThat(holder.list).isNull();
+    }
+
+    @Test
+    public void should_not_clear_user_initialized_spy_on_close() throws Exception {
+        class WithUserInitializedSpy {
+            @Spy private List<String> list = new ArrayList<>();
+        }
+
+        WithUserInitializedSpy holder = new WithUserInitializedSpy();
+
+        try (AutoCloseable ignored = MockitoAnnotations.openMocks(holder)) {
+            assertThat(holder.list).isNotNull();
+        }
+
+        assertThat(holder.list).isNotNull();
+    }
+
+    @Test
+    public void should_clear_auto_initialized_spy_in_superclass_on_close() throws Exception {
+        class BaseWithSpy {
+            @Spy ArrayList<String> parentList;
+        }
+        class ChildWithSpy extends BaseWithSpy {
+            @Spy ArrayList<String> childList;
+        }
+
+        ChildWithSpy holder = new ChildWithSpy();
+
+        try (AutoCloseable ignored = MockitoAnnotations.openMocks(holder)) {
+            assertThat(holder.parentList).isNotNull().isEmpty();
+            assertThat(holder.childList).isNotNull().isEmpty();
+            holder.parentList.add("parent");
+            holder.childList.add("child");
+        }
+
+        assertThat(holder.parentList).isNull();
+        assertThat(holder.childList).isNull();
+    }
+
     static class WithMockMakerSpies {
         @Spy(mockMaker = MockMakers.SUBCLASS)
         List<String> instanceSpy = new ArrayList<String>();
