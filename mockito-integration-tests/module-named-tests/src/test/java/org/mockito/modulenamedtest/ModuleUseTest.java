@@ -28,6 +28,15 @@ public class ModuleUseTest {
     }
 
     @Test
+    public void can_mock_abstract_class_from_other_named_module() throws ClassNotFoundException {
+        // Use reflection to avoid requiring java.logging in module-info.java.
+        Class<?> handlerType = Class.forName("java.util.logging.Handler");
+        Object handler = mock(handlerType);
+
+        assertThat(handler).isInstanceOf(handlerType);
+    }
+
+    @Test
     public void can_mock_with_named_module_subclass_with_interface() {
         Qux qux = mock(Qux.class, withSettings().extraInterfaces(Runnable.class));
         when(qux.value()).thenReturn("qux");
