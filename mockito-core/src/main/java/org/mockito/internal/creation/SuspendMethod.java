@@ -17,8 +17,6 @@ import org.mockito.internal.util.Primitives;
  * See <a href="https://github.com/Kotlin/kotlin-coroutines/blob/master/kotlin-coroutines-informal.md#continuation-passing-style">Design docs for details</a>.
  */
 public final class SuspendMethod {
-    private static final String KOTLIN_EXPERIMENTAL_CONTINUATION =
-            "kotlin.coroutines.experimental.Continuation";
     private static final String KOTLIN_CONTINUATION = "kotlin.coroutines.Continuation";
 
     public static Class<?>[] trimSuspendParameterTypes(Class<?>[] parameterTypes) {
@@ -59,8 +57,7 @@ public final class SuspendMethod {
     }
 
     private static boolean isContinuationType(Class<?> parameterType) {
-        String name = parameterType.getName();
-        return name.equals(KOTLIN_CONTINUATION) || name.equals(KOTLIN_EXPERIMENTAL_CONTINUATION);
+        return parameterType.getName().equals(KOTLIN_CONTINUATION);
     }
 
     private SuspendMethod() {}
