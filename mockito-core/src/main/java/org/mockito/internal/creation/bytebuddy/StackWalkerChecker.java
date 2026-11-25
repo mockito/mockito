@@ -15,6 +15,7 @@ class StackWalkerChecker implements Predicate<Class<?>> {
     private final Method stackWalkerGetInstance;
     private final Method stackWalkerWalk;
     private final Method stackWalkerStackFrameGetDeclaringClass;
+    private final Method stackWalkerStackFrameGetMethodName;
     private final Enum<?> stackWalkerOptionRetainClassReference;
 
     StackWalkerChecker() throws Exception {
@@ -27,6 +28,7 @@ class StackWalkerChecker implements Predicate<Class<?>> {
         Class<?> stackWalkerStackFrame = Class.forName("java.lang.StackWalker$StackFrame");
         stackWalkerStackFrameGetDeclaringClass =
                 stackWalkerStackFrame.getMethod("getDeclaringClass");
+        stackWalkerStackFrameGetMethodName = stackWalkerStackFrame.getMethod("getMethodName");
         @SuppressWarnings("unchecked")
         Enum<?> stackWalkerOptionRetainClassReference =
                 Enum.valueOf(stackWalkerOption, "RETAIN_CLASS_REFERENCE");
@@ -62,22 +64,31 @@ class StackWalkerChecker implements Predicate<Class<?>> {
                                                         .startsWith("org.mockito.internal.")) {
                                                     continue;
                                                 }
-                                                if (iterator.hasNext()) {
-                                                    Object next = iterator.next();
+                                                // The first frame that is not a Mockito frame is
+                                                // the currently executing constructor of the
+                                                // mocked type. Its constructor chain is followed
+                                                // until the code that started the construction is
+                                                // reached: a construction mock does not apply if
+                                                // the chain originated from a subclass constructor,
+                                                // but applies for this(...) delegation within the
+                                                // type itself and for direct instantiation.
+                                                while (iterator.hasNext()) {
+                                                    Object caller = iterator.next();
+                                                    if (!stackWalkerStackFrameGetMethodName
+                                                            .invoke(caller)
+                                                            .equals("<init>")) {
+                                                        return false;
+                                                    }
                                                     Class<?> declaringClass =
                                                             (Class<?>)
                                                                     stackWalkerStackFrameGetDeclaringClass
-                                                                            .invoke(next);
-                                                    if (type != declaringClass
-                                                            && type.isAssignableFrom(
-                                                                    declaringClass)) {
-                                                        return true;
-                                                    } else {
-                                                        break;
+                                                                            .invoke(caller);
+                                                    if (type != declaringClass) {
+                                                        return type.isAssignableFrom(
+                                                                declaringClass);
                                                     }
-                                                } else {
-                                                    break;
                                                 }
+                                                return false;
                                             } catch (Exception ignored) {
                                                 return false;
                                             }
