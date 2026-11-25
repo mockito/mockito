@@ -79,6 +79,24 @@ public class StubbingWithAdditionalAnswersTest {
     }
 
     @Test
+    public void can_return_non_empty_vararg_array_when_stubbed_with_concrete_arguments() {
+        String[] values = {"a", "b", "c"};
+
+        given(iMethods.mixedVarargsReturningStringArray(1, values)).will(returnsLastArg());
+
+        assertThat(iMethods.mixedVarargsReturningStringArray(1, values)).isSameAs(values);
+    }
+
+    @Test
+    public void can_return_empty_vararg_array_when_stubbed_with_concrete_arguments() {
+        String[] values = {};
+
+        given(iMethods.mixedVarargsReturningStringArray(1, values)).will(returnsLastArg());
+
+        assertThat(iMethods.mixedVarargsReturningStringArray(1, values)).isSameAs(values);
+    }
+
+    @Test
     public void returns_arg_at_throws_on_out_of_range_var_args() throws Exception {
         given(iMethods.mixedVarargsReturningString(eq(1), any(String[].class)))
                 .will(returnsArgAt(3));

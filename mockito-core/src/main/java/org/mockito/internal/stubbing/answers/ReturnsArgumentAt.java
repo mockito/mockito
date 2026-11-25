@@ -67,6 +67,11 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
     @Override
     public void validateFor(InvocationOnMock invocationOnMock) {
         Invocation invocation = (Invocation) invocationOnMock;
+        if (wantedArgIndexIsVarargAndSameTypeAsReturnType(invocation)) {
+            // The raw vararg array already matches the method's return type.
+            return;
+        }
+
         int argumentPosition = inferWantedArgumentPosition(invocation);
         validateIndexWithinTheoreticalInvocationRange(invocation, argumentPosition);
         validateArgumentTypeCompatibility(invocation, argumentPosition);
@@ -161,13 +166,6 @@ public class ReturnsArgumentAt implements Answer<Object>, ValidableAnswer, Seria
         if (argumentIndex < varargIndex) {
             // Same for non vararg arguments
             return parameterTypes[argumentIndex];
-        }
-        // if wanted argument is vararg
-        if (wantedArgIndexIsVarargAndSameTypeAsReturnType(invocation)) {
-            // return the vararg array if return type is compatible
-            // because the user probably want to return the array itself if the return type is
-            // compatible
-            return parameterTypes[argumentIndex]; // move to MethodInfo ?
         }
         // return the type in this vararg array
         return parameterTypes[varargIndex].getComponentType();
