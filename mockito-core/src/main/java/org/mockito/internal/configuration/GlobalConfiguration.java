@@ -56,11 +56,6 @@ public class GlobalConfiguration implements IMockitoConfiguration, Serializable 
     }
 
     @Override
-    public boolean enableClassCache() {
-        return GLOBAL_CONFIGURATION.get().enableClassCache();
-    }
-
-    @Override
     public Answer<Object> getDefaultAnswer() {
         return GLOBAL_CONFIGURATION.get().getDefaultAnswer();
     }

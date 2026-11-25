@@ -6,25 +6,88 @@ package org.mockito.internal.creation.bytebuddy;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.ClassFileVersion;
+import net.bytebuddy.agent.ByteBuddyAgent;
 import net.bytebuddy.description.modifier.TypeManifestation;
 import net.bytebuddy.dynamic.DynamicType;
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
+import org.mockito.MockMakers;
+import org.mockito.MockSettings;
+import org.mockito.Mockito;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.plugins.MockMaker;
+import org.mockitoutil.ClassLoaders;
 
 import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.function.IntSupplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
 
 public class SubclassByteBuddyMockMakerTest
         extends AbstractByteBuddyMockMakerTest<SubclassByteBuddyMockMaker> {
 
     public SubclassByteBuddyMockMakerTest() {
         super(new SubclassByteBuddyMockMaker());
+    }
+
+    @Test
+    public void can_create_mock_with_default_allocator_in_an_isolated_class_loader()
+            throws Exception {
+        ClassLoader classLoader = mockitoClassLoader().build();
+
+        IntSupplier mock = ClassLoaders.using(classLoader).execute(() -> mockAbstractClass());
+
+        assertThat(mock.getAsInt()).isZero();
+    }
+
+    @Test
+    public void can_create_mock_with_constructor_when_unsafe_is_unavailable() throws Exception {
+        ClassLoader classLoader = mockitoClassLoader().without("sun.misc.Unsafe").build();
+
+        assertThatExceptionOfType(ClassNotFoundException.class)
+                .isThrownBy(() -> classLoader.loadClass("sun.misc.Unsafe"));
+        IntSupplier mock = ClassLoaders.using(classLoader).execute(() -> mockAbstractClass(3));
+
+        assertThat(mock.getAsInt()).isEqualTo(3);
+    }
+
+    private static ClassLoaders.ExcludingURLClassLoaderBuilder mockitoClassLoader() {
+        return ClassLoaders.excludingClassLoader()
+                .withCodeSourceUrlOf(
+                        Mockito.class,
+                        ByteBuddy.class,
+                        ByteBuddyAgent.class,
+                        AbstractClassToMock.class)
+                // Naming the nested mock type links its enclosing test class.
+                .withCodeSourceUrlOf(ClassLoaders.class, Assertions.class);
+    }
+
+    private static IntSupplier mockAbstractClass(Object... constructorArgs) {
+        MockSettings settings = withSettings().mockMaker(MockMakers.SUBCLASS);
+        if (constructorArgs.length > 0) {
+            settings.useConstructor(constructorArgs);
+        }
+        return mock(AbstractClassToMock.class, settings);
+    }
+
+    public abstract static class AbstractClassToMock implements IntSupplier {
+        private final int value;
+
+        public AbstractClassToMock(int value) {
+            this.value = value;
+        }
+
+        @Override
+        public final int getAsInt() {
+            return value;
+        }
     }
 
     @Test

@@ -5,13 +5,12 @@
 module org.mockito {
     requires java.instrument;
     requires jdk.attach;
+    requires jdk.unsupported;
     requires net.bytebuddy;
     requires net.bytebuddy.agent;
     requires static junit;
     requires static org.hamcrest;
-    requires static org.objenesis;
     requires static org.opentest4j;
-    requires static jdk.unsupported;
     requires static org.jspecify;
 
     exports org.mockito;

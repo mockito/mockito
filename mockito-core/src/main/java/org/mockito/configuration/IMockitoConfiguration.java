@@ -56,8 +56,13 @@ public interface IMockitoConfiguration {
     boolean cleansStackTrace();
 
     /**
-     * Allow objenesis to cache classes. If you're in an environment where classes
-     * are dynamically reloaded, you can disable this to avoid classcast exceptions.
+     * Formerly controlled caching of Objenesis instantiators.
+     *
+     * @return {@code false} by default
+     * @deprecated Mockito ignores the return value. This method is retained for compatibility.
      */
-    boolean enableClassCache();
+    @Deprecated
+    default boolean enableClassCache() {
+        return false;
+    }
 }

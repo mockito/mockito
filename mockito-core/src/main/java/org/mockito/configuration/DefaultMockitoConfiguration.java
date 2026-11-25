@@ -28,12 +28,4 @@ public class DefaultMockitoConfiguration implements IMockitoConfiguration {
     public boolean cleansStackTrace() {
         return true;
     }
-
-    /* (non-Javadoc)
-     * @see org.mockito.configuration.IMockitoConfiguration#enableClassCache()
-     */
-    @Override
-    public boolean enableClassCache() {
-        return true;
-    }
 }

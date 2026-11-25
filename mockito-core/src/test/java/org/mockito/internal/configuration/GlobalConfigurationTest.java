@@ -13,30 +13,30 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockitoutil.ClassLoaders;
-import org.objenesis.Objenesis;
 
 public class GlobalConfigurationTest {
     @Test
     public void returns_mockito_annotation_engine_of_Plugins_if_no_MockitoConfiguration()
-            throws Throwable {
-        ClassLoader anotherWorld =
+            throws Exception {
+        ClassLoader isolatedLoader =
                 ClassLoaders.isolatedClassLoader()
                         .withCurrentCodeSourceUrls()
-                        .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class, Objenesis.class)
-                        .withPrivateCopyOf("org.mockito", "net.bytebuddy", "org.objenesis")
-                        .withCodeSourceUrlOf(Assertions.class)
-                        .withPrivateCopyOf("org.assertj")
+                        .withCodeSourceUrlOf(Mockito.class, ByteBuddy.class, Assertions.class)
+                        .withPrivateCopyOf(
+                                "org.mockito",
+                                "net.bytebuddy",
+                                "org.mockitoutil",
+                                "org.assertj.core")
                         .without("org.mockito.configuration.MockitoConfiguration")
                         .build();
 
-        ClassLoaders.using(anotherWorld)
+        ClassLoaders.using(isolatedLoader)
                 .execute(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                assertThat(new GlobalConfiguration().tryGetPluginAnnotationEngine())
-                                        .isInstanceOf(Plugins.getAnnotationEngine().getClass());
-                            }
+                        () -> {
+                            assertThat(new GlobalConfiguration().tryGetPluginAnnotationEngine())
+                                    .isNotNull()
+                                    .isSameAs(Plugins.getAnnotationEngine());
+                            return null;
                         });
     }
 

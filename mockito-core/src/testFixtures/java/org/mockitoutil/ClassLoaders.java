@@ -11,9 +11,10 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.lang.StackWalker.Option;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import java.lang.invoke.SerializedLambda;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -31,17 +32,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
-
-import org.mockito.internal.configuration.plugins.Plugins;
-import org.mockito.plugins.MemberAccessor;
-import org.objenesis.Objenesis;
-import org.objenesis.ObjenesisStd;
-import org.objenesis.instantiator.ObjectInstantiator;
 
 public abstract class ClassLoaders {
     protected ClassLoader parent = currentClassLoader();
@@ -78,111 +72,60 @@ public abstract class ClassLoaders {
 
     public abstract ClassLoader build();
 
-    public static Class<?>[] coverageTool() {
-        HashSet<Class<?>> classes = new HashSet<Class<?>>();
-        classes.add(safeGetClass("net.sourceforge.cobertura.coveragedata.TouchCollector"));
-        classes.add(safeGetClass("org.slf4j.LoggerFactory"));
-
-        classes.remove(null);
-        return classes.toArray(new Class<?>[classes.size()]);
-    }
-
-    private static Class<?> safeGetClass(String className) {
-        try {
-            return Class.forName(className);
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
-    }
-
     public static ClassLoaderExecutor using(final ClassLoader classLoader) {
         return new ClassLoaderExecutor(classLoader);
     }
 
+    @FunctionalInterface
+    public interface SerializableCallable<T> extends Callable<T>, Serializable {}
+
     public static class ClassLoaderExecutor {
-        private ClassLoader classLoader;
+        private final ClassLoader classLoader;
 
         public ClassLoaderExecutor(ClassLoader classLoader) {
             this.classLoader = classLoader;
         }
 
-        public void execute(final Runnable task) throws Exception {
+        /** Runs a lambda defined by the given loader, passing its captured values unchanged. */
+        public <T> T execute(SerializableCallable<T> task) throws Exception {
             ExecutorService executorService =
                     Executors.newSingleThreadExecutor(
-                            new ThreadFactory() {
-                                @Override
-                                public Thread newThread(Runnable r) {
-                                    Thread thread = Executors.defaultThreadFactory().newThread(r);
-                                    thread.setContextClassLoader(classLoader);
-                                    return thread;
-                                }
+                            r -> {
+                                Thread thread = Executors.defaultThreadFactory().newThread(r);
+                                thread.setContextClassLoader(classLoader);
+                                return thread;
                             });
             try {
-                Future<?> taskFuture =
-                        executorService.submit(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            reloadTaskInClassLoader(task).run();
-                                        } catch (Throwable throwable) {
-                                            throw new IllegalStateException(
-                                                    format(
-                                                            "Given task could not be loaded properly in the given classloader '%s', error '%s",
-                                                            task, throwable.getMessage()),
-                                                    throwable);
-                                        }
-                                    }
-                                });
-                taskFuture.get();
-                executorService.shutdownNow();
+                return executorService.submit(() -> reloadTaskInClassLoader(task).call()).get();
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                throw e;
             } catch (ExecutionException e) {
-                throw this.<Exception>unwrapAndThrows(e);
+                Throwable cause = e.getCause();
+                throw new IllegalStateException(
+                        format(
+                                "Could not execute task in class loader '%s': %s",
+                                classLoader, cause.getMessage()),
+                        cause);
+            } finally {
+                executorService.shutdownNow();
             }
         }
 
         @SuppressWarnings("unchecked")
-        private <T extends Throwable> T unwrapAndThrows(ExecutionException ex) throws T {
-            throw (T) ex.getCause();
-        }
+        private <T> Callable<T> reloadTaskInClassLoader(SerializableCallable<T> task)
+                throws ReflectiveOperationException {
+            Method writeReplace = task.getClass().getDeclaredMethod("writeReplace");
+            writeReplace.setAccessible(true);
+            SerializedLambda lambda = (SerializedLambda) writeReplace.invoke(task);
 
-        Runnable reloadTaskInClassLoader(Runnable task) {
-            try {
-                @SuppressWarnings("unchecked")
-                Class<Runnable> taskClassReloaded =
-                        (Class<Runnable>) classLoader.loadClass(task.getClass().getName());
-
-                Objenesis objenesis = new ObjenesisStd();
-                ObjectInstantiator<Runnable> thingyInstantiator =
-                        objenesis.getInstantiatorOf(taskClassReloaded);
-                Runnable reloaded = thingyInstantiator.newInstance();
-
-                // lenient shallow copy of class compatible fields
-                for (Field field : task.getClass().getDeclaredFields()) {
-                    Field declaredField = taskClassReloaded.getDeclaredField(field.getName());
-                    int modifiers = declaredField.getModifiers();
-                    if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
-                        // Skip static final fields (e.g. jacoco fields)
-                        // otherwise IllegalAccessException (can be bypassed with Unsafe though)
-                        // We may also miss coverage data.
-                        continue;
-                    }
-                    if (declaredField.getType() == field.getType()) { // don't copy this
-                        MemberAccessor accessor = Plugins.getMemberAccessor();
-                        accessor.set(declaredField, reloaded, accessor.get(field, task));
-                    }
-                }
-
-                return reloaded;
-            } catch (ClassNotFoundException e) {
-                throw new IllegalStateException(e);
-            } catch (IllegalAccessException e) {
-                throw new IllegalStateException(e);
-            } catch (NoSuchFieldException e) {
-                throw new IllegalStateException(e);
-            }
+            // Recreate the lambda with the isolated class's factory. JaCoCo owns its probe state.
+            Class<?> capturingClass =
+                    classLoader.loadClass(lambda.getCapturingClass().replace('/', '.'));
+            Method deserialize =
+                    capturingClass.getDeclaredMethod("$deserializeLambda$", SerializedLambda.class);
+            deserialize.setAccessible(true);
+            return (Callable<T>) deserialize.invoke(null, lambda);
         }
     }
 
@@ -324,11 +267,11 @@ public abstract class ClassLoaders {
         }
 
         @Override
-        public Class<?> findClass(String name) throws ClassNotFoundException {
+        protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
             if (classShouldBeExcluded(name))
                 throw new ClassNotFoundException(
                         "classes with prefix : " + excludedPrefixes + " are excluded");
-            return super.findClass(name);
+            return super.loadClass(name, resolve);
         }
 
         private boolean classShouldBeExcluded(String name) {

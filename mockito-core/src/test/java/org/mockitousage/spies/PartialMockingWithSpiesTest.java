@@ -5,21 +5,26 @@
 package org.mockitousage.spies;
 
 import static net.bytebuddy.ClassFileVersion.JAVA_V21;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.CALLS_REAL_METHODS;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.withSettings;
 import static org.mockitoutil.Conditions.methodsInStackTrace;
 
 import net.bytebuddy.ClassFileVersion;
-import org.assertj.core.api.Assertions;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.MockMakers;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.bytebuddy.InlineByteBuddyMockMaker;
 import org.mockito.internal.util.reflection.ReflectionMemberAccessor;
@@ -77,6 +82,23 @@ public class PartialMockingWithSpiesTest extends TestBase {
     Person spy = spy(new Person());
 
     @Test
+    public void subclass_spy_calls_real_methods_with_copied_state() {
+        Person original = new Person();
+        Person subclassSpy =
+                mock(
+                        Person.class,
+                        withSettings()
+                                .mockMaker(MockMakers.SUBCLASS)
+                                .spiedInstance(original)
+                                .defaultAnswer(CALLS_REAL_METHODS));
+
+        doReturn("stubbed").when(subclassSpy).howMuchDidYouInherit();
+
+        assertThat(subclassSpy.getName()).isEqualTo("Default name");
+        assertThat(subclassSpy.howMuchDidYouInherit()).isEqualTo("stubbed");
+    }
+
+    @Test
     public void shouldCallRealMethdsEvenDelegatedToOtherSelfMethod() {
         // when
         String name = spy.getName();
@@ -121,7 +143,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
             fail();
         } catch (Throwable t) {
             // then
-            Assertions.assertThat(t)
+            assertThat(t)
                     .has(
                             methodsInStackTrace(
                                     "throwSomeException",
@@ -142,7 +164,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
             fail();
         } catch (Throwable t) {
             // then
-            Assertions.assertThat(t)
+            assertThat(t)
                     .has(
                             methodsInStackTrace(
                                     "throwSomeException",
@@ -167,7 +189,7 @@ public class PartialMockingWithSpiesTest extends TestBase {
             fail();
         } catch (Throwable t) {
             // then
-            Assertions.assertThat(t)
+            assertThat(t)
                     .has(
                             methodsInStackTrace(
                                     "throwSomeException",

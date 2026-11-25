@@ -19,10 +19,10 @@ import static org.mockito.internal.util.StringUtil.join;
 /**
  * The facility to create mocks.
  *
- * <p>By default, an internal byte-buddy/asm/objenesis based implementation is used.</p>
+ * <p>By default, Mockito uses an implementation based on Byte Buddy.</p>
  *
  * <p>{@code MockMaker} is an extension point that makes it possible to use custom dynamic proxies
- * and avoid using the default byte-buddy/asm/objenesis implementation.
+ * and supply your own mock creation strategy.
  * For example, the android users can use a MockMaker that can work with Dalvik virtual machine
  * and hence bring Mockito to android apps developers.</p>
  *

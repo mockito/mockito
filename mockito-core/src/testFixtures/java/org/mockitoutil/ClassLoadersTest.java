@@ -4,6 +4,7 @@
  */
 package org.mockitoutil;
 
+import static java.lang.Thread.currentThread;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.fail;
@@ -11,8 +12,6 @@ import static org.mockitoutil.ClassLoaders.currentClassLoader;
 import static org.mockitoutil.ClassLoaders.excludingClassLoader;
 import static org.mockitoutil.ClassLoaders.isolatedClassLoader;
 import static org.mockitoutil.ClassLoaders.jdkClassLoader;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
@@ -285,85 +284,64 @@ public class ClassLoadersTest {
 
     @Test
     public void can_run_in_given_classloader() throws Exception {
-        // given
-        final ClassLoader cl =
-                isolatedClassLoader()
-                        .withCurrentCodeSourceUrls()
-                        .withCodeSourceUrlOf(Assertions.class)
-                        .withPrivateCopyOf("org.assertj.core")
-                        .withPrivateCopyOf(ClassLoadersTest.class.getPackage().getName())
-                        .without(AClass.class.getName())
-                        .build();
+        ClassLoader cl = classLoaderWithoutAClass();
+        String excludedClass = AClass.class.getName();
 
-        final AtomicBoolean executed = new AtomicBoolean(false);
-
-        // when
-        ClassLoaders.using(cl)
-                .execute(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                assertThat(this.getClass().getClassLoader())
-                                        .describedAs("runnable is reloaded in given classloader")
-                                        .isEqualTo(cl);
-                                assertThat(Thread.currentThread().getContextClassLoader())
-                                        .describedAs(
-                                                "Thread context classloader is using given classloader")
-                                        .isEqualTo(cl);
-
-                                try {
-                                    assertThat(
-                                                    Thread.currentThread()
-                                                            .getContextClassLoader()
-                                                            .loadClass("java.lang.String"))
+        Class<?> loadedClass =
+                ClassLoaders.using(cl)
+                        .execute(
+                                () -> {
+                                    assertThat(ClassLoadersTest.class.getClassLoader())
+                                            .describedAs(
+                                                    "lambda is loaded by the given classloader")
+                                            .isSameAs(cl);
+                                    ClassLoader contextLoader =
+                                            currentThread().getContextClassLoader();
+                                    assertThat(contextLoader)
+                                            .describedAs(
+                                                    "thread uses the given context classloader")
+                                            .isSameAs(cl);
+                                    assertThat(contextLoader.loadClass(String.class.getName()))
                                             .describedAs("can load JDK type")
-                                            .isNotNull();
-                                    assertThat(
-                                                    Thread.currentThread()
-                                                            .getContextClassLoader()
-                                                            .loadClass(
-                                                                    "org.mockitoutil.ClassLoadersTest$ClassUsingInterface1"))
-                                            .describedAs("can load classloader types")
-                                            .isNotNull();
-                                } catch (ClassNotFoundException cnfe) {
-                                    Assertions.fail("should not have raised a CNFE", cnfe);
-                                }
-                                executed.set(true);
-                            }
-                        });
+                                            .isSameAs(String.class);
+                                    assertThat(Assertions.class.getClassLoader())
+                                            .describedAs("can load a private copy of AssertJ")
+                                            .isSameAs(cl);
+                                    assertThatThrownBy(() -> contextLoader.loadClass(excludedClass))
+                                            .describedAs("rejects the excluded class")
+                                            .isInstanceOf(ClassNotFoundException.class);
+                                    return contextLoader.loadClass(
+                                            CLASS_NAME_DEPENDING_ON_INTERFACE);
+                                });
 
-        // then
-        assertThat(executed.get()).isEqualTo(true);
+        assertThat(loadedClass.getClassLoader())
+                .describedAs("test class is defined by the given classloader")
+                .isSameAs(cl);
     }
 
     @Test
-    public void cannot_load_runnable_in_given_classloader_if_some_type_cant_be_loaded()
-            throws Exception {
-        // given
-        final ClassLoader cl =
-                isolatedClassLoader()
-                        .withCurrentCodeSourceUrls()
-                        .withPrivateCopyOf(ClassLoadersTest.class.getPackage().getName())
-                        .without(AClass.class.getName())
-                        .build();
+    public void cannot_load_class_from_task_when_type_is_excluded() {
+        var executor = ClassLoaders.using(classLoaderWithoutAClass());
+        assertThatThrownBy(
+                        () ->
+                                executor.execute(
+                                        () -> {
+                                            new AClass();
+                                            return null;
+                                        }))
+                .isInstanceOf(IllegalStateException.class)
+                .hasCauseInstanceOf(NoClassDefFoundError.class)
+                .hasMessageContaining("ClassLoadersTest$AClass");
+    }
 
-        // when
-        try {
-            ClassLoaders.using(cl)
-                    .execute(
-                            new Runnable() {
-                                @Override
-                                public void run() {
-                                    AClass cant_be_found = new AClass();
-                                }
-                            });
-            Assertions.fail("should have raised a ClassNotFoundException");
-        } catch (IllegalStateException ise) {
-            // then
-            assertThat(ise)
-                    .hasCauseInstanceOf(NoClassDefFoundError.class)
-                    .hasMessageContaining("AClass");
-        }
+    private static ClassLoader classLoaderWithoutAClass() {
+        return isolatedClassLoader()
+                .withCurrentCodeSourceUrls()
+                .withCodeSourceUrlOf(Assertions.class)
+                .withPrivateCopyOf("org.assertj.core")
+                .withPrivateCopyOf(ClassLoadersTest.class.getPackage().getName())
+                .without(AClass.class.getName())
+                .build();
     }
 
     @SuppressWarnings("unused")

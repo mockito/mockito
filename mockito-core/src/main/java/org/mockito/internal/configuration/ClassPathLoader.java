@@ -14,16 +14,15 @@ import org.mockito.plugins.MockMaker;
  * <p>
  * <ul>
  *     <li>
- *         Can load the mockito configuration. The user who want to provide his own mockito configuration
- *         should write the class <code>org.mockito.configuration.MockitoConfiguration</code> that implements
- *         {@link IMockitoConfiguration}. For example :
+ *         Loads <code>org.mockito.configuration.MockitoConfiguration</code>, which implements
+ *         {@link IMockitoConfiguration}. For example
  *         <pre class="code"><code class="java">
  * package org.mockito.configuration;
  *
  * //...
  *
  * public class MockitoConfiguration implements IMockitoConfiguration {
- *     boolean enableClassCache() { return false; }
+ *     public boolean cleansStackTrace() { return false; }
  *
  *     // ...
  * }
