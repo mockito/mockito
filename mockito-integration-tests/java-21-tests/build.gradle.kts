@@ -22,6 +22,10 @@ java {
     }
 }
 
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(21)
+}
+
 tasks {
     val testWithBytebuddyAgent by registering(Test::class) {
         if (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {

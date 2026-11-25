@@ -16,6 +16,12 @@ dependencies {
 }
 
 tasks {
+    withType<JavaCompile>().configureEach {
+        // The ErrorProne API exposes jdk.compiler internals, which are not
+        // visible when compiling with --release
+        options.release.set(null)
+    }
+
     test {
         inputs.files(configurations.errorproneJavac).withNormalizer(ClasspathNormalizer::class)
         jvmArgumentProviders.add(

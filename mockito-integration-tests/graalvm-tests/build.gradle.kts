@@ -21,6 +21,10 @@ java {
     targetCompatibility = JavaVersion.VERSION_17
 }
 
+tasks.withType<JavaCompile>().configureEach {
+    options.release.set(17)
+}
+
 val graalVmLauncher = javaToolchains.launcherFor {
     languageVersion = JavaLanguageVersion.of(21)
     nativeImageCapable = true
