@@ -30,6 +30,7 @@ import org.mockito.mock.MockCreationSettings;
 public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
 
     private final BytecodeGenerator cachingMockBytecodeGenerator;
+    private final BytecodeGenerator fallbackMockBytecodeGenerator;
 
     public SubclassByteBuddyMockMaker() {
         this(ModuleHandler.make());
@@ -38,14 +39,50 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
     public SubclassByteBuddyMockMaker(ModuleHandler handler) {
         cachingMockBytecodeGenerator =
                 new TypeCachingBytecodeGenerator(new SubclassBytecodeGenerator(handler), false);
+        // Only used when the default strategy fails with a NoClassDefFoundError (e.g.
+        // a superclass defined by another class loader in OSGi); kept separate so the
+        // default path and its cache are completely unaffected.
+        fallbackMockBytecodeGenerator =
+                new TypeCachingBytecodeGenerator(
+                        new SubclassBytecodeGenerator(handler, true), false);
     }
 
     @Override
     public <T> T createMock(MockCreationSettings<T> settings, MockHandler<T> handler) {
-        Class<? extends T> mockedProxyType = createMockType(settings);
+        try {
+            return doCreateMock(settings, handler, false, null);
+        } catch (NoClassDefFoundError linkageError) {
+            // In environments with several class loaders (e.g. OSGi), a superclass of
+            // the mocked type can be defined by a class loader that the mock's class
+            // loader cannot see. Since the generated mock redeclares inherited methods,
+            // types referenced by the superclass must be resolvable by the mock's
+            // loader, and defining or initializing the mock otherwise fails. Retry once
+            // with the superclass loaders included. The default strategy above is
+            // always tried first, so behavior for default usage is unchanged.
+            return doCreateMock(settings, handler, true, linkageError);
+        }
+    }
 
+    private <T> T doCreateMock(
+            MockCreationSettings<T> settings,
+            MockHandler<T> handler,
+            boolean withSuperclassLoaders,
+            NoClassDefFoundError linkageError) {
+        Class<? extends T> mockedProxyType;
+        if (withSuperclassLoaders) {
+            if (!SubclassBytecodeGenerator.hasDistinctSuperclassLoaders(
+                    settings.getTypeToMock())) {
+                // The broader strategy would end up with the same class loader; retrying
+                // cannot resolve the missing type.
+                throw linkageError;
+            }
+            mockedProxyType = createMockTypeWithSuperclassLoaders(settings);
+        } else {
+            mockedProxyType = createMockType(settings);
+        }
         Instantiator instantiator = Plugins.getInstantiatorProvider().getInstantiator(settings);
         T mockInstance = null;
+
         try {
             mockInstance = instantiator.newInstance(mockedProxyType);
             MockAccess mockAccess = (MockAccess) mockInstance;
@@ -77,6 +114,21 @@ public class SubclassByteBuddyMockMaker implements ClassCreatingMockMaker {
     public <T> Class<? extends T> createMockType(MockCreationSettings<T> settings) {
         try {
             return cachingMockBytecodeGenerator.mockClass(
+                    MockFeatures.withMockFeatures(
+                            settings.getTypeToMock(),
+                            settings.getExtraInterfaces(),
+                            settings.getSerializableMode(),
+                            settings.isStripAnnotations(),
+                            settings.getDefaultAnswer()));
+        } catch (Exception bytecodeGenerationFailed) {
+            throw prettifyFailure(settings, bytecodeGenerationFailed);
+        }
+    }
+
+    private <T> Class<? extends T> createMockTypeWithSuperclassLoaders(
+            MockCreationSettings<T> settings) {
+        try {
+            return fallbackMockBytecodeGenerator.mockClass(
                     MockFeatures.withMockFeatures(
                             settings.getTypeToMock(),
                             settings.getExtraInterfaces(),
