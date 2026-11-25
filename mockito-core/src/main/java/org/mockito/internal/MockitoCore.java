@@ -44,6 +44,7 @@ import org.mockito.exceptions.misusing.NotAMockException;
 import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.MockSettingsImpl;
 import org.mockito.internal.invocation.finder.VerifiableInvocationsFinder;
+import org.mockito.internal.junit.DefaultStubbingLookupListener;
 import org.mockito.internal.listeners.VerificationStartedNotifier;
 import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.stubbing.DefaultLenientStubber;
@@ -81,6 +82,18 @@ public class MockitoCore {
         checkDoNotMockAnnotation(creationSettings);
         T mock = createMock(creationSettings);
         mockingProgress().mockingStarted(mock, creationSettings);
+        if (creationSettings.getStrictness() == Strictness.STRICT_STUBS) {
+            // When no session, rule or extension is active, no test listener has attached itself
+            // to this mock, which would silently ignore the per-mock strictness. Attach an
+            // internal listener eagerly; it determines the actual strictness per lookup,
+            // preferring stubbing level and mock level strictness over the null test level
+            // strictness. When a session is active, its listener was notified during
+            // mockingStarted and keeps precedence, e.g. for mismatch reporting.
+            // https://github.com/mockito/mockito/issues/3262
+            creationSettings
+                    .getStubbingLookupListeners()
+                    .add(new DefaultStubbingLookupListener(null));
+        }
         return mock;
     }
 
