@@ -19,7 +19,8 @@ public class EqualsTest extends TestBase {
         assertEquals(new Equals(new Integer(2)), new Equals(new Integer(2)));
         assertFalse(new Equals(null).equals(null));
         assertFalse(new Equals(null).equals("Test"));
-        assertEquals(1, new Equals(null).hashCode());
+        assertEquals(0, new Equals(null).hashCode());
+        assertEquals(new Equals(new Integer(2)).hashCode(), new Equals(new Integer(2)).hashCode());
     }
 
     @Test
