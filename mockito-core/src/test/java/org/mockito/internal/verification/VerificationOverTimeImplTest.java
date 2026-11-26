@@ -4,7 +4,10 @@
  */
 package org.mockito.internal.verification;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.atMost;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.MockitoAnnotations.openMocks;
@@ -30,6 +33,19 @@ public class VerificationOverTimeImplTest {
     public void should_return_on_success() {
         impl.verify(null);
         verify(delegate).verify(null);
+    }
+
+    @Test
+    public void should_sleep_between_successful_polls_when_not_returning_on_success() {
+        VerificationOverTimeImpl afterImpl = new VerificationOverTimeImpl(50, 200, delegate, false);
+
+        long start = System.currentTimeMillis();
+        afterImpl.verify(null);
+        long elapsed = System.currentTimeMillis() - start;
+
+        assertThat(elapsed).isGreaterThanOrEqualTo(200);
+        verify(delegate, atLeast(2)).verify(null);
+        verify(delegate, atMost(20)).verify(null);
     }
 
     @Test
