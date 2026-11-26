@@ -277,6 +277,11 @@ public interface MockSettings extends Serializable {
      * Mockito attempts to use constructor when creating instance of the mock.
      * This is particularly useful for spying on abstract classes. See also {@link Mockito#spy(Class)}.
      * <p>
+     * When used with {@link Mockito#mockConstruction(Class, java.util.function.Function)},
+     * the selected constructor is invoked so that fields (including {@code final} fields) are
+     * initialized on the construction mock. Without this setting, construction mocks skip the
+     * real constructor body and leave fields uninitialized.
+     * <p>
      * Example:
      * <pre class="code"><code class="java">
      * //Robust API, via settings builder:
@@ -290,6 +295,15 @@ public interface MockSettings extends Serializable {
      * //Mocking a non-static inner abstract class:
      * InnerAbstract spy = mock(InnerAbstract.class, withSettings()
      *   .useConstructor().outerInstance(outerInstance).defaultAnswer(CALLS_REAL_METHODS));
+     *
+     * // Construction mock with constructor initialization (including final fields):
+     * try (MockedConstruction&lt;Foo&gt; mocked = mockConstruction(Foo.class,
+     *         context -&gt; withSettings()
+     *             .useConstructor(context.arguments().get(0))
+     *             .defaultAnswer(CALLS_REAL_METHODS))) {
+     *     Foo foo = new Foo("value");
+     *     // foo's fields are initialized via the selected constructor
+     * }
      * </code></pre>
      *
      * @param args The arguments to pass to the constructor. Not passing any arguments means that a parameter-less
