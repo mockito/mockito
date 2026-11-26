@@ -4,6 +4,7 @@
  */
 package org.mockito.internal.util.reflection;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -102,6 +103,16 @@ public abstract class GenericMetadataSupport {
         }
         if (type instanceof ParameterizedType) {
             return (Class<?>) ((ParameterizedType) type).getRawType();
+        }
+        if (type instanceof GenericArrayType) {
+            /*
+             * A generic array type has no raw type of its own, it has to be built from the raw type
+             * of its component type. This happens for instance when a type variable is bound to an
+             * array of another type variable, such as "class Service<T, S> extends Api<T, S[]>".
+             */
+            Class<?> rawComponentType =
+                    extractRawTypeOf(((GenericArrayType) type).getGenericComponentType());
+            return Array.newInstance(rawComponentType, 0).getClass();
         }
         if (type instanceof BoundedType) {
             return extractRawTypeOf(((BoundedType) type).firstBound());
