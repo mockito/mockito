@@ -13,6 +13,7 @@ import java.util.Date;
 import org.junit.Test;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.invocation.InvocationBuilder;
+import org.mockito.invocation.InvocationOnMock;
 
 public class AnswersWithDelayTest {
     @Test
@@ -65,5 +66,27 @@ public class AnswersWithDelayTest {
 
         final long timePassed = after.getTime() - before.getTime();
         assertThat(timePassed).isCloseTo(sleepyTime, within(15L));
+    }
+
+    @Test
+    public void should_restore_interrupt_status_when_interrupted_during_delay() throws Throwable {
+        // Regression test for #2035: Thread.sleep() clears the thread's interrupt status as
+        // a side effect of throwing InterruptedException. AnswersWithDelay must restore that
+        // status before letting the exception propagate, otherwise a pooled/reused thread
+        // silently loses a pending interrupt.
+        final AnswersWithDelay testSubject = new AnswersWithDelay(10000L, new Returns("value"));
+        final InvocationOnMock invocation =
+                new InvocationBuilder().method("oneArg").arg("A").toInvocation();
+
+        try {
+            Thread.currentThread().interrupt();
+
+            assertThatThrownBy(() -> testSubject.answer(invocation))
+                    .isInstanceOf(InterruptedException.class);
+
+            assertThat(Thread.currentThread().isInterrupted()).isTrue();
+        } finally {
+            Thread.interrupted();
+        }
     }
 }
