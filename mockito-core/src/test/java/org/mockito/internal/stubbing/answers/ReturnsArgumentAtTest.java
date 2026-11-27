@@ -112,6 +112,23 @@ public class ReturnsArgumentAtTest {
     }
 
     @Test
+    public void should_validate_an_empty_last_vararg_array_with_a_compatible_return_type()
+            throws Throwable {
+        String[] values = {};
+        Invocation invocation =
+                new InvocationBuilder()
+                        .method("mixedVarargsReturningObjectArray")
+                        .argTypes(Object.class, String[].class)
+                        .args(new Object(), values)
+                        .toInvocation();
+        ReturnsArgumentAt answer = new ReturnsArgumentAt(ReturnsArgumentAt.LAST_ARGUMENT);
+
+        answer.validateFor(invocation);
+
+        assertThat(answer.answer(invocation)).isSameAs(values);
+    }
+
+    @Test
     public void should_raise_an_exception_if_index_is_not_in_allowed_range_at_creation_time()
             throws Throwable {
         try {
