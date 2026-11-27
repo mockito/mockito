@@ -176,6 +176,15 @@ public class MockMethodAdvice extends MockMethodDispatcher {
     }
 
     @Override
+    public boolean isSpy(Object instance) {
+        if (instance == interceptors.target) {
+            return false;
+        }
+        MockMethodInterceptor interceptor = interceptors.get(instance);
+        return interceptor != null && interceptor.isSpy();
+    }
+
+    @Override
     public boolean isMocked(Object instance) {
         return (isMock(instance) || getSingletonMockInterceptor(instance) != null)
                 && selfCallInfo.checkSelfCall(instance);
@@ -697,7 +706,8 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         @Advice.OnMethodEnter(skipOn = Advice.OnNonDefaultValue.class)
         private static boolean enter(@Identifier String id, @Advice.This Object self) {
             MockMethodDispatcher dispatcher = MockMethodDispatcher.get(id, self);
-            return dispatcher != null && dispatcher.isMock(self);
+            // Spies use the real method, all other mocks use identity.
+            return dispatcher != null && dispatcher.isMock(self) && !dispatcher.isSpy(self);
         }
 
         @SuppressWarnings({"unused", "UnusedAssignment"})
@@ -718,7 +728,8 @@ public class MockMethodAdvice extends MockMethodDispatcher {
         @Advice.OnMethodEnter(skipOn = Advice.OnNonDefaultValue.class)
         private static boolean enter(@Identifier String identifier, @Advice.This Object self) {
             MockMethodDispatcher dispatcher = MockMethodDispatcher.get(identifier, self);
-            return dispatcher != null && dispatcher.isMock(self);
+            // Spies use the real method, all other mocks use identity.
+            return dispatcher != null && dispatcher.isMock(self) && !dispatcher.isSpy(self);
         }
 
         @SuppressWarnings({"unused", "UnusedAssignment"})

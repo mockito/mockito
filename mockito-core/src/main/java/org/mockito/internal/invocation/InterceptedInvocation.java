@@ -179,7 +179,8 @@ public class InterceptedInvocation implements Invocation, VerificationAwareInvoc
             return false;
         }
         InterceptedInvocation other = (InterceptedInvocation) o;
-        return this.mockRef.get().equals(other.mockRef.get())
+        // Compare mocks by identity: a spy's equals method is the real one.
+        return this.mockRef.get() == other.mockRef.get()
                 && this.mockitoMethod.equals(other.mockitoMethod)
                 && this.equalArguments(other.arguments);
     }
