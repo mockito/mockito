@@ -12,6 +12,7 @@ import org.mockito.internal.configuration.plugins.Plugins;
 import org.mockito.internal.creation.settings.CreationSettings;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
 import org.mockito.internal.util.reflection.LenientCopyTool;
+import org.mockito.internal.verification.InvocationSignal;
 import org.mockito.invocation.MockHandler;
 import org.mockito.mock.MockCreationSettings;
 import org.mockito.mock.MockName;
@@ -109,6 +110,7 @@ public class MockUtil {
 
         mock = resolve(mock);
         getMockMaker(settings.getMockMaker()).resetMock(mock, newHandler, settings);
+        InvocationSignal.fire();
     }
 
     public static MockHandler<?> getMockHandler(Object mock) {

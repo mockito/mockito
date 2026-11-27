@@ -25,10 +25,10 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void should_pass_when_verification_passes() {
-        Timeout t = new Timeout(1, mode, timer);
+        Timeout t = new Timeout(mode, timer);
 
         when(timer.isCounting()).thenReturn(true);
-        doNothing().when(mode).verify(data);
+        doNothing().when(mode).verify(any());
 
         t.verify(data);
 
@@ -39,10 +39,10 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void should_fail_because_verification_fails() {
-        Timeout t = new Timeout(1, mode, timer);
+        Timeout t = new Timeout(mode, timer);
 
         when(timer.isCounting()).thenReturn(true, true, true, false);
-        doThrow(error).doThrow(error).doThrow(error).when(mode).verify(data);
+        doThrow(error).doThrow(error).doThrow(error).when(mode).verify(any());
 
         try {
             t.verify(data);
@@ -55,10 +55,10 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void should_pass_even_if_first_verification_fails() {
-        Timeout t = new Timeout(1, mode, timer);
+        Timeout t = new Timeout(mode, timer);
 
         when(timer.isCounting()).thenReturn(true, true, true, false);
-        doThrow(error).doThrow(error).doNothing().when(mode).verify(data);
+        doThrow(error).doThrow(error).doNothing().when(mode).verify(any());
 
         t.verify(data);
         verify(timer, times(3)).isCounting();
@@ -66,9 +66,9 @@ public class TimeoutTest extends TestBase {
 
     @Test
     public void should_try_to_verify_correct_number_of_times() {
-        Timeout t = new Timeout(10, mode, timer);
+        Timeout t = new Timeout(mode, timer);
 
-        doThrow(error).when(mode).verify(data);
+        doThrow(error).when(mode).verify(any());
         when(timer.isCounting()).thenReturn(true, true, true, true, true, false);
 
         try {
@@ -77,6 +77,19 @@ public class TimeoutTest extends TestBase {
         } catch (MockitoAssertionError e) {
         }
 
-        verify(mode, times(5)).verify(data);
+        // five passes while the timer is counting, plus the final pass once it has run out
+        verify(mode, times(6)).verify(any());
+    }
+
+    @Test
+    public void should_run_a_final_pass_once_the_timer_has_run_out() {
+        Timeout t = new Timeout(mode, timer);
+
+        when(timer.isCounting()).thenReturn(true, false);
+        doThrow(error).doNothing().when(mode).verify(any());
+
+        t.verify(data);
+
+        verify(mode, times(2)).verify(any());
     }
 }

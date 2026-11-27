@@ -8,10 +8,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.after;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.withSettings;
 import static org.mockito.junit.MockitoJUnit.rule;
 import static org.mockitoutil.Stopwatch.createNotStarted;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.ThrowableAssert;
@@ -21,9 +23,11 @@ import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.exceptions.verification.TooFewActualInvocations;
 import org.mockito.internal.verification.DummyVerificationMode;
 import org.mockito.junit.MockitoRule;
+import org.mockito.stubbing.Answer;
 import org.mockito.verification.Timeout;
 import org.mockito.verification.VerificationMode;
 import org.mockitousage.IMethods;
@@ -240,6 +244,47 @@ public class VerificationWithTimeoutTest {
                 .hasMessageContaining("Wanted but not invoked"); // TODO specific exception
 
         watch.assertElapsedTimeIsLessThan(1000, TimeUnit.MILLISECONDS);
+    }
+
+    @Test
+    public void should_return_soon_after_the_invocation_when_the_timeout_is_long() {
+        // when
+        async.runAfter(50, callMock('c'));
+        watch.start();
+
+        // then
+        verify(mock, timeout(30_000)).oneArg('c');
+        watch.assertElapsedTimeIsLessThan(10, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void should_not_spin_when_the_failure_message_calls_toString_on_a_mock_argument() {
+        // given
+        AtomicInteger toStringCalls = new AtomicInteger();
+        Answer<Object> countingToString =
+                invocation -> {
+                    if (invocation.getMethod().getName().equals("toString")) {
+                        toStringCalls.incrementAndGet();
+                        return "argument";
+                    }
+                    return null;
+                };
+        Object argument =
+                Mockito.mock(Object.class, withSettings().defaultAnswer(countingToString));
+        mock.objectArgMethod(argument);
+
+        // when
+        Assertions.assertThatThrownBy(
+                        () -> verify(mock, timeout(500)).objectArgMethod("something else"))
+                .isInstanceOf(AssertionError.class)
+                .hasMessageContaining("Argument(s) are different");
+
+        // then
+        // Each failed pass prints the actual argument, which calls toString() on the mock and so
+        // registers an invocation. That must not wake the verification up again, or it re-runs in
+        // a busy loop until the timeout. Two passes are expected: one at the start and one at the
+        // deadline.
+        assertThat(toStringCalls.get()).isLessThan(10);
     }
 
     private Runnable callMock(final char c) {
