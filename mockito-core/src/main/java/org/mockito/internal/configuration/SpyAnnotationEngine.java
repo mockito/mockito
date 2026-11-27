@@ -14,6 +14,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -51,6 +53,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
     public AutoCloseable process(Class<?> context, Object testInstance) {
         Field[] fields = context.getDeclaredFields();
         MemberAccessor accessor = Plugins.getMemberAccessor();
+        List<Field> initializedFields = new ArrayList<>();
         for (Field field : fields) {
             if (field.isAnnotationPresent(Spy.class)
                     && !field.isAnnotationPresent(InjectMocks.class)) {
@@ -60,6 +63,7 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                     instance = accessor.get(field, testInstance);
                     if (instance == null) {
                         accessor.set(field, testInstance, spyNewInstance(testInstance, field));
+                        initializedFields.add(field);
                     } else {
                         SpyAnnotationUtil.resetOrCreateSpy(field, instance, accessor, testInstance);
                     }
@@ -73,7 +77,14 @@ public class SpyAnnotationEngine implements AnnotationEngine {
                 }
             }
         }
-        return new NoAction();
+        if (initializedFields.isEmpty()) {
+            return new NoAction();
+        }
+        return () -> {
+            for (Field field : initializedFields) {
+                accessor.set(field, testInstance, null);
+            }
+        };
     }
 
     private static Object spyNewInstance(Object testInstance, Field field)
