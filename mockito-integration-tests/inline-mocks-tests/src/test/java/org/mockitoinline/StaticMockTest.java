@@ -52,6 +52,20 @@ public final class StaticMockTest {
     }
 
     @Test
+    public void testStaticMockWithVerificationFailedOnDifferentArguments() {
+        try (MockedStatic<Dummy> dummy = Mockito.mockStatic(Dummy.class)) {
+            Dummy.fooVoid("bar");
+            assertThatThrownBy(
+                            () -> {
+                                dummy.verify(() -> Dummy.fooVoid("baz"));
+                            })
+                    .isInstanceOf(AssertionError.class)
+                    .hasMessageContaining("Argument(s) are different!")
+                    .hasMessageNotContaining("An unexpected error occurred");
+        }
+    }
+
+    @Test
     public void testStaticMockWithNoInteractions() {
         try (MockedStatic<Dummy> dummy = Mockito.mockStatic(Dummy.class)) {
             dummy.when(Dummy::foo).thenReturn("bar");

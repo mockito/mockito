@@ -16,7 +16,6 @@ import static org.mockito.internal.verification.VerificationModeFactory.noMoreIn
 import org.mockito.MockedStatic;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
-import org.mockito.exceptions.base.MockitoAssertionError;
 import org.mockito.exceptions.base.MockitoException;
 import org.mockito.internal.listeners.VerificationStartedNotifier;
 import org.mockito.internal.progress.MockingProgress;
@@ -75,7 +74,9 @@ public final class MockedStaticImpl<T> extends ScopedMockImpl<MockMaker.StaticMo
 
         try {
             verification.apply();
-        } catch (MockitoException | MockitoAssertionError e) {
+        } catch (MockitoException | AssertionError e) {
+            // Verification failures may be reported as JUnit or opentest4j assertion errors,
+            // which do not extend MockitoAssertionError (see ExceptionFactory).
             throw e;
         } catch (Throwable t) {
             throw new MockitoException(
