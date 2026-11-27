@@ -8,6 +8,7 @@ import static org.mockito.internal.listeners.StubbingLookupNotifier.notifyStubbe
 import static org.mockito.internal.progress.ThreadSafeMockingProgress.mockingProgress;
 
 import org.mockito.Answers;
+import org.mockito.internal.creation.SuspendMethod;
 import org.mockito.internal.invocation.InvocationMatcher;
 import org.mockito.internal.invocation.MatchersBinder;
 import org.mockito.internal.stubbing.InvocationContainerImpl;
@@ -87,7 +88,7 @@ public class MockHandlerImpl<T> implements MockHandler<T> {
                     VerificationDataImpl data =
                             new VerificationDataImpl(invocationContainer, invocationMatcher);
                     verificationMode.verify(data);
-                    return null;
+                    return SuspendMethod.defaultPrimitiveReturnValue(invocation.getMethod());
                 } else {
                     // this means there is an invocation on a different mock. Re-adding verification
                     // mode
