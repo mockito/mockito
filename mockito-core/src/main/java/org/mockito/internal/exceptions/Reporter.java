@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.mockito.exceptions.base.MockitoAssertionError;
@@ -900,23 +902,40 @@ public class Reporter {
             Field field, Collection<?> mockCandidates) {
         List<String> mockNames =
                 mockCandidates.stream()
+                        .filter(MockUtil::isMock)
                         .map(MockUtil::getMockName)
                         .map(MockName::toString)
                         .collect(Collectors.toList());
-        return new MockitoException(
-                join(
-                        "Mockito couldn't inject mock dependency on field "
-                                + "'"
-                                + field
-                                + "' that is annotated with @InjectMocks in your test, ",
-                        "because there were multiple matching mocks (i.e. "
-                                + "fields annotated with @Mock and having matching type): "
-                                + String.join(", ", mockNames)
-                                + ".",
-                        "If you have multiple fields of same type in your class under test "
-                                + "then consider naming the @Mock fields "
-                                + "identically to the respective class under test's fields, "
-                                + "so Mockito can match them by name."));
+        Set<String> spyClasses =
+                mockCandidates.stream()
+                        .filter(Predicate.not(MockUtil::isMock))
+                        .map(Object::getClass)
+                        .map(Class::toString)
+                        .collect(Collectors.toSet());
+
+        List<String> messageRows =
+                new ArrayList<>(
+                        List.of(
+                                "Mockito couldn't inject mock dependency on field "
+                                        + "'"
+                                        + field
+                                        + "' that is annotated with @InjectMocks in your test, ",
+                                "because there were multiple matching mocks or spies (i.e. "
+                                        + "fields annotated with @Mock or @Spy and having matching type)."));
+
+        if (!mockNames.isEmpty()) {
+            messageRows.add("Mocks:" + String.join(", ", mockNames));
+        }
+        if (!spyClasses.isEmpty()) {
+            messageRows.add("Spies:" + String.join(", ", spyClasses));
+        }
+        messageRows.add(
+                "If you have multiple fields of same type in your class under test "
+                        + "then consider naming the @Mock fields "
+                        + "identically to the respective class under test's fields, "
+                        + "so Mockito can match them by name.");
+
+        return new MockitoException(join("\n", "", messageRows));
     }
 
     private static String exceptionCauseMessageIfAvailable(Exception details) {
