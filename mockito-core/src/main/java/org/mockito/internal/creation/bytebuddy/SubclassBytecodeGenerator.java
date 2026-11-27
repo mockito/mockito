@@ -194,6 +194,7 @@ class SubclassBytecodeGenerator implements BytecodeGenerator {
                 assertVisibility(iFace);
             }
             classLoader = handler.toCodegenLoader(classLoader);
+            handler.readFromTo(MockAccess.class, features.mockedType);
             handler.exportFromTo(MockAccess.class, classLoader);
             handler.exportFromTo(features.mockedType, classLoader);
             for (Class<?> iFace : features.interfaces) {
